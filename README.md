@@ -125,27 +125,35 @@ To delete all resources and avoid unnecessary costs, follow these steps:
 
 1️⃣ Delete the Knative Service
 
+```sh
 kubectl delete -f ollama-knative.yaml
+```
 
 2️⃣ Delete the GPU Node Group
 
+```sh
 aws eks delete-nodegroup \
   --cluster-name ollama-cluster \
   --nodegroup-name gpu-spot-nodes \
   --region ${AWS_REGION}
+```
 
 3️⃣ Delete the EKS Cluster
 
+```sh
 aws eks delete-cluster \
   --name ollama-cluster \
   --region ${AWS_REGION}
+```
 
 4️⃣ Verify Deletion
 
 Ensure all resources have been deleted:
 
+```sh
 aws eks list-clusters --region ${AWS_REGION}
 aws eks list-nodegroups --cluster-name ollama-cluster --region ${AWS_REGION}
+```
 
 ✅ All resources should be removed successfully!
 
