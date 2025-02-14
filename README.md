@@ -88,10 +88,9 @@ aws eks create-nodegroup \
 
 ### **3 Install Knative Serving on Your Cluster
 
+```sh
 kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
-
-
-----
+```
 
 
 - install NVIDIA device plugin
