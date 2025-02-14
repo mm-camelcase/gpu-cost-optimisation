@@ -73,6 +73,22 @@ aws ec2 describe-images \
 }
 ```
 
+- cpu node group for system pods
+
+```sh
+aws eks create-nodegroup \
+  --cluster-name ollama-cluster \
+  --nodegroup-name cpu-system-nodes \
+  --capacity-type ON_DEMAND \
+  --instance-types t3.medium \
+  --ami-type AL2_x86_64 \
+  --scaling-config minSize=1,maxSize=3,desiredSize=1 \
+  --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
+  --subnets ${SUBNET_IDS//,/ } \
+  --region ${AWS_REGION}
+```
+
+
 ```sh
 aws eks create-nodegroup \
   --cluster-name ollama-cluster \
@@ -193,6 +209,13 @@ kubectl delete -f ollama-knative.yaml
 ```sh
 aws eks delete-nodegroup \
   --cluster-name ollama-cluster \
+  --nodegroup-name gpu-spot-nodes \
+  --region ${AWS_REGION}
+```
+
+```sh
+aws eks delete-nodegroup \
+  --cluster-name cpu-system-nodes \
   --nodegroup-name gpu-spot-nodes \
   --region ${AWS_REGION}
 ```

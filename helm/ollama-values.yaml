@@ -1,0 +1,33 @@
+ollama:
+  resources:
+    limits:
+      nvidia.com/gpu: 1  # ✅ Must be an integer
+  extraEnv:
+    - name: NVIDIA_VISIBLE_DEVICES
+      value: all
+    - name: NVIDIA_DRIVER_CAPABILITIES
+      value: compute,utility
+    - name: NVIDIA_REQUIRE_CUDA
+      value: "cuda>=11.0"
+  gpu:
+    enabled: true
+    type: nvidia
+    number: 1
+  models:
+    create:
+      - name: mistral
+        model: mistral
+    pull:
+      - name: llama2
+        model: llama2
+    run:
+      - name: mistral
+        model: mistral
+ingress:
+  enabled: true
+  className: traefik
+  hosts:
+  - host: ollama.3.248.93.23.nip.io
+    paths:
+    - path: /
+      pathType: Prefix

@@ -9,7 +9,13 @@ spec:
       annotations:
         autoscaling.knative.dev/min-scale: "0"   # Scale to zero when idle
         autoscaling.knative.dev/max-scale: "2"   # Allow 2 Ollama instances
+        client.knative.dev/revision-timestamp: "2024-02-14T12:00:01Z"  # Force new version
     spec:
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Equal"
+        value: "present"
+        effect: "NoSchedule"
       containers:
       - name: ollama-mistral
         image: ollama/ollama:0.5.11
