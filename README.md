@@ -54,7 +54,24 @@ aws eks create-cluster --name ollama-cluster \
   --region ${AWS_REGION}
 ```
 
+
+
 Create a **GPU-enabled Spot Node Group**:
+
+- check for AWS Deep Learning AMI (NVIDIA Drivers, CUDA, and container runtime are pre-installed)
+
+```sh
+aws ec2 describe-images \
+    --owners amazon \
+    --filters "Name=name,Values=Deep Learning Base AMI (Amazon Linux 2)*" \
+    --query 'Images | sort_by(@, &CreationDate) | [-1].{ImageId:ImageId, Name:Name}' \
+    --region eu-west-1
+
+{
+    "ImageId": "ami-0cca382104dfca6de",
+    "Name": "Deep Learning Base AMI (Amazon Linux 2) Version 60.9"
+}
+```
 
 ```sh
 aws eks create-nodegroup \
@@ -62,11 +79,15 @@ aws eks create-nodegroup \
   --nodegroup-name gpu-spot-nodes \
   --capacity-type SPOT \
   --instance-types g4dn.xlarge \
+  --ami-type AL2_x86_64_GPU \
+  --image-id ami-0cca382104dfca6de \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
   --region ${AWS_REGION}
 ```
+
+
 
 ✅ **Spot Instances dramatically reduce GPU costs.**
 
