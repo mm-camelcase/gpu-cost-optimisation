@@ -215,8 +215,8 @@ aws eks delete-nodegroup \
 
 ```sh
 aws eks delete-nodegroup \
-  --cluster-name cpu-system-nodes \
-  --nodegroup-name gpu-spot-nodes \
+  --cluster-name ollama-cluster \
+  --nodegroup-name cpu-system-nodes \
   --region ${AWS_REGION}
 ```
 
