@@ -96,12 +96,13 @@ kubectl apply -f https://github.com/knative/serving/releases/latest/download/ser
 
 - install NVIDIA device plugin
 
+```sh
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.1/nvidia-device-plugin.yml
-daemonset.apps/nvidia-device-plugin-daemonset created
 
 kubectl apply -f https://github.com/knative/net-kourier/releases/latest/download/kourier.yaml
 
 patch configmap/config-network   --namespace knative-serving   --type merge   --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+```
 
 
 ✅ **Spot Instances dramatically reduce GPU costs.**
