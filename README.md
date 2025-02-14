@@ -80,18 +80,46 @@ aws eks create-nodegroup \
   --capacity-type SPOT \
   --instance-types g4dn.xlarge \
   --ami-type AL2_x86_64_GPU \
-  --image-id ami-0cca382104dfca6de \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
   --region ${AWS_REGION}
 ```
 
+### **3 Install Knative Serving on Your Cluster
+
+kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
+
+
+----
+
+
+- install NVIDIA device plugin
+
+kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.1/nvidia-device-plugin.yml
+daemonset.apps/nvidia-device-plugin-daemonset created
+
+kubectl apply -f https://github.com/knative/net-kourier/releases/latest/download/kourier.yaml
+
+patch configmap/config-network   --namespace knative-serving   --type merge   --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
 
 
 ✅ **Spot Instances dramatically reduce GPU costs.**
 
-### **3️⃣ Enable CUDA MPS for Shared GPU Usage**
+### **4 Enable CUDA MPS for Shared GPU Usage**
+
+get instance idle
+
+```sh
+aws ssm describe-instance-information --region eu-west-1
+```
+
+jump to node
+
+```sh
+aws ssm start-session --target i-085380fe9f01932b9 --region eu-west-1
+```
+
 
 ```sh
 export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps
@@ -102,6 +130,13 @@ nvidia-cuda-mps-control -d
 ✅ **Allows multiple AI models to share one GPU dynamically.**
 
 ### **4️⃣ Deploy Two Ollama AI Models That Converse**
+
+point `kubectl` at cluster
+
+```sh
+aws eks update-kubeconfig --region eu-west-1 --name ollama-cluster
+```
+
 
 Create **Knative Service (`ollama-knative.yaml`)**:
 

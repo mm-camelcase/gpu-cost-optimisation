@@ -1,0 +1,30 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ollama-gpu
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "0"   # Scale to zero when idle
+        autoscaling.knative.dev/max-scale: "2"   # Allow 2 Ollama instances
+    spec:
+      containers:
+      - name: ollama-mistral
+        image: ollama/ollama:0.5.11
+        args: ["mistral"]  # Runs Mistral model
+        ports:
+          - containerPort: 8080  # ✅ Required for Knative
+        resources:
+          limits:
+            nvidia.com/gpu: "1"  # Uses shared CUDA MPS
+      - name: ollama-llama2
+        image: ollama/ollama:0.5.11
+        args: ["llama2"]  # Runs LLaMA 2 model
+        env:
+          - name: OLLAMA_MISTRAL_HOST
+            value: "localhost:8080"  # ✅ Internal communication to mistral
+        resources:
+          limits:
+            nvidia.com/gpu: "1"  # Uses shared CUDA MPS
