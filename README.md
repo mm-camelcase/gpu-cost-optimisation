@@ -64,7 +64,7 @@ aws eks create-nodegroup \
   --instance-types g4dn.xlarge \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
-  --subnets  ${SUBNET_IDS} \
+  --subnets  ${SUBNET_IDS//,/ } \
   --region ${AWS_REGION}
 ```
 
