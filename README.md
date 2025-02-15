@@ -117,31 +117,31 @@ $ kubectl get nodes \
 #### 
 
 ```sh
-kubectl describe daemonset aws-node -n kube-system | grep -A5 Tolerations
+#kubectl describe daemonset aws-node -n kube-system | grep -A5 Tolerations
 kubectl describe daemonset kube-proxy -n kube-system | grep -A5 Tolerations
 ```
 
 both have have broad toleration (op=Exists), it means it tolerates all taints, including nvidia.com/gpu,value=present,effect=NO_SCHEDULE.
 
 ```sh
-kubectl patch daemonset aws-node -n kube-system --type='json' -p='[
-  {
-    "op": "replace",
-    "path": "/spec/template/spec/tolerations",
-    "value": [
-      {
-        "key": "node.kubernetes.io/not-ready",
-        "operator": "Exists",
-        "effect": "NoExecute"
-      },
-      {
-        "key": "node.kubernetes.io/unreachable",
-        "operator": "Exists",
-        "effect": "NoExecute"
-      }
-    ]
-  }
-]'
+# kubectl patch daemonset aws-node -n kube-system --type='json' -p='[
+#   {
+#     "op": "replace",
+#     "path": "/spec/template/spec/tolerations",
+#     "value": [
+#       {
+#         "key": "node.kubernetes.io/not-ready",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       },
+#       {
+#         "key": "node.kubernetes.io/unreachable",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       }
+#     ]
+#   }
+# ]'
 ```
 
 ```sh
@@ -168,7 +168,7 @@ kubectl patch daemonset kube-proxy -n kube-system --type='json' -p='[
 ### **3 Install Knative Serving on Your Cluster
 
 ```sh
-kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
+#kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
 ```
 
 
@@ -177,12 +177,12 @@ kubectl apply -f https://github.com/knative/serving/releases/latest/download/ser
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.1/nvidia-device-plugin.yml
 
-kubectl apply -f https://github.com/knative/net-kourier/releases/latest/download/kourier.yaml
+#kubectl apply -f https://github.com/knative/net-kourier/releases/latest/download/kourier.yaml
 
-kubectl patch configmap/config-network \
-  --namespace knative-serving \
-  --type merge \
-  --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+# kubectl patch configmap/config-network \
+#   --namespace knative-serving \
+#   --type merge \
+#   --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
 ```
 
 

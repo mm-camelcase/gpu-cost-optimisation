@@ -23,6 +23,17 @@ ollama:
     run:
       - name: mistral
         model: mistral
+
+# ✅ Force scheduling on GPU nodes
+nodeSelector:
+  node-type: gpu  # 👈 Matches GPU nodegroup labels
+
+# ✅ Tolerate taints applied to GPU nodes
+tolerations:
+  - key: "nvidia.com/gpu"
+    operator: "Exists"
+    effect: "NoSchedule"
+
 ingress:
   enabled: true
   className: traefik
