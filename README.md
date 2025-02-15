@@ -102,7 +102,7 @@ aws eks create-nodegroup \
   --subnets  ${SUBNET_IDS//,/ } \
   --region ${AWS_REGION} \
   --labels node-type=gpu \
-  --taints nvidia.com/gpu=present:NoSchedule
+  --taints key=nvidia.com/gpu,value=present,effect=NO_SCHEDULE
 ```
 
 ### **3 Install Knative Serving on Your Cluster
