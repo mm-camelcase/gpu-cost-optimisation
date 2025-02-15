@@ -85,7 +85,8 @@ aws eks create-nodegroup \
   --scaling-config minSize=1,maxSize=3,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets ${SUBNET_IDS//,/ } \
-  --region ${AWS_REGION}
+  --region ${AWS_REGION} \
+  --labels node-type=cpu,system=true
 ```
 
 
@@ -99,7 +100,9 @@ aws eks create-nodegroup \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
-  --region ${AWS_REGION}
+  --region ${AWS_REGION} \
+  --labels node-type=gpu \
+  --taints nvidia.com/gpu=present:NoSchedule
 ```
 
 ### **3 Install Knative Serving on Your Cluster
