@@ -105,6 +105,13 @@ aws eks create-nodegroup \
   --taints key=nvidia.com/gpu,value=present,effect=NO_SCHEDULE
 ```
 
+
+- check 
+
+$ kubectl get nodes \
+    --selector=node.kubernetes.io/instance-type=g4dn.xlarge \
+    -o jsonpath="{.items[0].spec.taints[0]}" | jq .
+
 ### **3 Install Knative Serving on Your Cluster
 
 ```sh
