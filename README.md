@@ -108,9 +108,62 @@ aws eks create-nodegroup \
 
 - check 
 
+```sh
 $ kubectl get nodes \
     --selector=node.kubernetes.io/instance-type=g4dn.xlarge \
     -o jsonpath="{.items[0].spec.taints[0]}" | jq .
+
+
+#### 
+
+```sh
+kubectl describe daemonset aws-node -n kube-system | grep -A5 Tolerations
+kubectl describe daemonset kube-proxy -n kube-system | grep -A5 Tolerations
+```
+
+both have have broad toleration (op=Exists), it means it tolerates all taints, including nvidia.com/gpu,value=present,effect=NO_SCHEDULE.
+
+```sh
+kubectl patch daemonset aws-node -n kube-system --type='json' -p='[
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/tolerations",
+    "value": [
+      {
+        "key": "node.kubernetes.io/not-ready",
+        "operator": "Exists",
+        "effect": "NoExecute"
+      },
+      {
+        "key": "node.kubernetes.io/unreachable",
+        "operator": "Exists",
+        "effect": "NoExecute"
+      }
+    ]
+  }
+]'
+```
+
+```sh
+kubectl patch daemonset kube-proxy -n kube-system --type='json' -p='[
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/tolerations",
+    "value": [
+      {
+        "key": "node.kubernetes.io/not-ready",
+        "operator": "Exists",
+        "effect": "NoExecute"
+      },
+      {
+        "key": "node.kubernetes.io/unreachable",
+        "operator": "Exists",
+        "effect": "NoExecute"
+      }
+    ]
+  }
+]'
+```
 
 ### **3 Install Knative Serving on Your Cluster
 
