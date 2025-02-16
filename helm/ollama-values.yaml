@@ -1,7 +1,11 @@
 ollama:
+  annotations:
+    forceRedeploy: "{{ now | date \"20060102-150405\" }}"  # 👈 Forces redeploy
   resources:
     limits:
-      nvidia.com/gpu: 1  # ✅ Must be an integer
+      nvidia.com/gpu: 1
+    requests:
+      nvidia.com/gpu: 1  # ✅ Ensures GPU allocation
   extraEnv:
     - name: NVIDIA_VISIBLE_DEVICES
       value: all
@@ -9,10 +13,23 @@ ollama:
       value: compute,utility
     - name: NVIDIA_REQUIRE_CUDA
       value: "cuda>=11.0"
+    - name: CUDA_VISIBLE_DEVICES
+      value: "0"
+    - name: NVIDIA_CONTAINER_RUNTIME
+      value: "nvidia"  # ✅ Ensures correct runtime
+    - name: CUDA_MPS_PIPE_DIRECTORY
+      value: "/tmp/nvidia-mps"
+    - name: CUDA_MPS_LOG_DIRECTORY
+      value: "/tmp/nvidia-log"
+  securityContext:
+    privileged: true
+    capabilities:
+      add: ["SYS_ADMIN"]
   gpu:
     enabled: true
     type: nvidia
     number: 1
+    nvidiaResource: "nvidia.com/gpu"
   models:
     create:
       - name: mistral

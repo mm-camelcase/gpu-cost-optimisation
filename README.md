@@ -118,7 +118,7 @@ $ kubectl get nodes \
 
 ```sh
 #kubectl describe daemonset aws-node -n kube-system | grep -A5 Tolerations
-kubectl describe daemonset kube-proxy -n kube-system | grep -A5 Tolerations
+#kubectl describe daemonset kube-proxy -n kube-system | grep -A5 Tolerations
 ```
 
 both have have broad toleration (op=Exists), it means it tolerates all taints, including nvidia.com/gpu,value=present,effect=NO_SCHEDULE.
@@ -145,24 +145,24 @@ both have have broad toleration (op=Exists), it means it tolerates all taints, i
 ```
 
 ```sh
-kubectl patch daemonset kube-proxy -n kube-system --type='json' -p='[
-  {
-    "op": "replace",
-    "path": "/spec/template/spec/tolerations",
-    "value": [
-      {
-        "key": "node.kubernetes.io/not-ready",
-        "operator": "Exists",
-        "effect": "NoExecute"
-      },
-      {
-        "key": "node.kubernetes.io/unreachable",
-        "operator": "Exists",
-        "effect": "NoExecute"
-      }
-    ]
-  }
-]'
+# kubectl patch daemonset kube-proxy -n kube-system --type='json' -p='[
+#   {
+#     "op": "replace",
+#     "path": "/spec/template/spec/tolerations",
+#     "value": [
+#       {
+#         "key": "node.kubernetes.io/not-ready",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       },
+#       {
+#         "key": "node.kubernetes.io/unreachable",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       }
+#     ]
+#   }
+# ]'
 ```
 
 ### **3 Install Knative Serving on Your Cluster
@@ -211,9 +211,18 @@ nvidia-cuda-mps-control -d
 
 ✅ **Allows multiple AI models to share one GPU dynamically.**
 
+### helm install
+
+
+helm upgrade --install ollama2 ollama \
+    --repo https://otwld.github.io/ollama-helm \
+    --values ollama-values.yaml \
+    --namespace ollama --create-namespace
+
+
 ### **4️⃣ Deploy Two Ollama AI Models That Converse**
 
-point `kubectl` at cluster
+<!-- point `kubectl` at cluster
 
 ```sh
 aws eks update-kubeconfig --region eu-west-1 --name ollama-cluster
@@ -254,6 +263,8 @@ Deploy it:
 ```sh
 kubectl apply -f ollama-knative.yaml
 ```
+ -->
+
 ✅ **Now, Mistral and LLaMA 2 will talk to each other dynamically.**
 
 
