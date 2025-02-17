@@ -89,6 +89,8 @@ aws eks create-nodegroup \
   --labels node-type=cpu,system=true
 ```
 
+#### was --ami-type AL2_x86_64_GPU
+
 
 ```sh
 aws eks create-nodegroup \
@@ -96,7 +98,7 @@ aws eks create-nodegroup \
   --nodegroup-name gpu-spot-nodes \
   --capacity-type SPOT \
   --instance-types g4dn.xlarge \
-  --ami-type AL2_x86_64_GPU \
+  --ami-type AL2023_X86_64_NVIDIA \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
