@@ -1,61 +1,37 @@
 ollama:
-  annotations:
-    forceRedeploy: "{{ now | date \"20060102-150405\" }}"  # 👈 Forces redeploy
-  resources:
-    limits:
-      nvidia.com/gpu: 1
-    requests:
-      nvidia.com/gpu: 1  # ✅ Ensures GPU allocation
-  extraEnv:
-    - name: NVIDIA_VISIBLE_DEVICES
-      value: all
-    - name: NVIDIA_DRIVER_CAPABILITIES
-      value: compute,utility
-    - name: NVIDIA_REQUIRE_CUDA
-      value: "cuda>=11.0"
-    - name: CUDA_VISIBLE_DEVICES
-      value: "0"
-    - name: NVIDIA_CONTAINER_RUNTIME
-      value: "nvidia"  # ✅ Ensures correct runtime
-    - name: CUDA_MPS_PIPE_DIRECTORY
-      value: "/tmp/nvidia-mps"
-    - name: CUDA_MPS_LOG_DIRECTORY
-      value: "/tmp/nvidia-log"
-  securityContext:
-    privileged: true
-    capabilities:
-      add: ["SYS_ADMIN"]
   gpu:
+    # -- Enable GPU integration
     enabled: true
-    type: nvidia
+    
+    # -- GPU type: 'nvidia' or 'amd'
+    type: 'nvidia'
+    
+    # -- Specify the number of GPU to 1
     number: 1
-    nvidiaResource: "nvidia.com/gpu"
+   
+  # -- List of models to pull at container startup
   models:
-    create:
-      - name: mistral
-        model: mistral
     pull:
-      - name: llama2
-        model: llama2
-    run:
-      - name: mistral
-        model: mistral
-
-# ✅ Force scheduling on GPU nodes
-nodeSelector:
-  node-type: gpu  # 👈 Matches GPU nodegroup labels
-
-# ✅ Tolerate taints applied to GPU nodes
-tolerations:
-  - key: "nvidia.com/gpu"
-    operator: "Exists"
-    effect: "NoSchedule"
+      - mistral
+      - llama2
 
 ingress:
   enabled: true
-  className: traefik
+  className: "nginx"
   hosts:
-  - host: ollama.3.248.93.23.nip.io
+  - host: ollama.camelcase.club  # Replace with your public IP or domain
     paths:
-    - path: /
-      pathType: Prefix
+      - path: /mistral
+        pathType: Prefix
+        backend:
+          service:
+            name: ollama
+            port:
+              number: 11434
+      - path: /llama2
+        pathType: Prefix
+        backend:
+          service:
+            name: ollama
+            port:
+              number: 11434

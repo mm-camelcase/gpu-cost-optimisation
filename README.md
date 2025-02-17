@@ -214,10 +214,27 @@ nvidia-cuda-mps-control -d
 ### helm install
 
 
-helm upgrade --install ollama2 ollama \
-    --repo https://otwld.github.io/ollama-helm \
-    --values ollama-values.yaml \
-    --namespace ollama --create-namespace
+ install
+
+```sh
+helm repo add ollama-helm https://otwld.github.io/ollama-helm/
+helm repo update
+helm install ollama ollama-helm/ollama --namespace ollama --values ollama-values.yaml
+```
+
+update
+
+```sh
+# -- This pulls the latest version of the ollama chart from the repo.
+helm repo update
+helm upgrade ollama ollama-helm/ollama --namespace ollama --values values.yaml
+```
+
+Uninstalling
+
+```sh
+helm delete ollama --namespace ollama
+```
 
 
 ### **4️⃣ Deploy Two Ollama AI Models That Converse**
