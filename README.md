@@ -202,6 +202,14 @@ jump to node
 aws ssm start-session --target i-085380fe9f01932b9 --region eu-west-1
 ```
 
+kill if running
+
+```sh
+ps aux | grep nvidia-cuda-mps-control
+
+echo "quit" | nvidia-cuda-mps-control
+```
+
 
 ```sh
 export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps
