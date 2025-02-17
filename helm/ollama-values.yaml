@@ -1,37 +1,38 @@
-ollama:
+ollama-mistral:
   gpu:
-    # -- Enable GPU integration
     enabled: true
-    
-    # -- GPU type: 'nvidia' or 'amd'
     type: 'nvidia'
-    
-    # -- Specify the number of GPU to 1
-    number: 1
-   
-  # -- List of models to pull at container startup
+    number: 1  # Both instances share the same GPU
   models:
     pull:
       - mistral
+
+ollama-llama2:
+  gpu:
+    enabled: true
+    type: 'nvidia'
+    number: 1  # Same shared GPU
+  models:
+    pull:
       - llama2
 
 ingress:
   enabled: true
   className: "nginx"
   hosts:
-  - host: ollama.camelcase.club  # Replace with your public IP or domain
-    paths:
-      - path: /mistral
-        pathType: Prefix
-        backend:
-          service:
-            name: ollama
-            port:
-              number: 11434
-      - path: /llama2
-        pathType: Prefix
-        backend:
-          service:
-            name: ollama
-            port:
-              number: 11434
+    - host: ollama.camelcase.club
+      paths:
+        - path: /mistral
+          pathType: Prefix
+          backend:
+            service:
+              name: ollama-mistral
+              port:
+                number: 11434
+        - path: /llama2
+          pathType: Prefix
+          backend:
+            service:
+              name: ollama-llama2
+              port:
+                number: 11434

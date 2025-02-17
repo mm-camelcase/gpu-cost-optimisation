@@ -211,6 +211,15 @@ nvidia-cuda-mps-control -d
 
 ✅ **Allows multiple AI models to share one GPU dynamically.**
 
+### ingress
+
+```sh
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+```
+
+
 ### helm install
 
 
@@ -219,7 +228,7 @@ nvidia-cuda-mps-control -d
 ```sh
 helm repo add ollama-helm https://otwld.github.io/ollama-helm/
 helm repo update
-helm install ollama ollama-helm/ollama --namespace ollama --values ollama-values.yaml
+helm install ollama ollama-helm/ollama --namespace ollama --create-namespace --values ollama-values.yaml
 ```
 
 update
@@ -227,7 +236,7 @@ update
 ```sh
 # -- This pulls the latest version of the ollama chart from the repo.
 helm repo update
-helm upgrade ollama ollama-helm/ollama --namespace ollama --values values.yaml
+helm upgrade ollama ollama-helm/ollama --namespace ollama --values ollama-values.yaml
 ```
 
 Uninstalling
