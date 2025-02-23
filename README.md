@@ -98,7 +98,7 @@ aws eks create-nodegroup \
   --nodegroup-name gpu-spot-nodes \
   --capacity-type SPOT \
   --instance-types g4dn.xlarge \
-  --ami-type AL2023_X86_64_NVIDIA \
+  --ami-type BOTTLEROCKET_x86_64_NVIDIA \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
