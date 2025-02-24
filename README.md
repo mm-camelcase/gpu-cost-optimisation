@@ -115,7 +115,19 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
 helm uninstall nvidia-device-plugin -n nvidia-device-plugin
 ```
 
+✅ **Allows multiple AI models to share one GPU dynamically.**
 
+### **6️⃣ Install Two separate Ollama instances**
+
+```sh
+helm repo add ollama-helm https://otwld.github.io/ollama-helm/
+helm repo update
+
+helm upgrade -i ollama-1 ollama-helm/ollama --namespace ollama --create-namespace --values ollama-1-values.yaml
+helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespace --values ollama-2-values.yaml
+```
+
+### **7️⃣ Confirm instances are using GPU**
 
 get instance idle
 
@@ -144,7 +156,7 @@ export CUDA_MPS_LOG_DIRECTORY=/tmp/nvidia-log
 nvidia-cuda-mps-control -d
 ```
 
-✅ **Allows multiple AI models to share one GPU dynamically.**
+
 
 ### ingress
 
