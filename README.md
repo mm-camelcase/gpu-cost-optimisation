@@ -91,7 +91,8 @@ aws eks create-nodegroup \
 
 #### was 
 - ami-type BOTTLEROCKET_x86_64_NVIDIA     --> no nvidia-cuda-mps-control    
-- ami-type AL2_x86_64_GPU       --> intermittent issues     
+- ami-type AL2_x86_64_GPU       --> intermittent issues   
+- ami-type AL2023_X86_64_NVIDIA  --> doesnt work with g4dn.xlarge
 
 
 
@@ -102,7 +103,7 @@ aws eks create-nodegroup \
   --nodegroup-name gpu-spot-nodes \
   --capacity-type SPOT \
   --instance-types g4dn.xlarge \
-  --ami-type AL2023_X86_64_NVIDIA \
+  --ami-type AL2_x86_64_GPU \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
