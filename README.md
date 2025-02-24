@@ -132,6 +132,21 @@ helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespac
 
 ### **7️⃣ Confirm instances are using GPU**
 
+- will do this during conversation
+- exposed with lb
+
+
+```sh
+curl -X POST "http://aa98a66015f9741d28801c723d55e974-1392936248.eu-west-1.elb.amazonaws.com:11434/api/generate" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model": "mistral",
+           "prompt": "Tell me an interesting fact about space.",
+           "stream": false
+         }'
+```
+
+
 get instance idle
 
 ```sh
@@ -144,56 +159,37 @@ jump to node
 aws ssm start-session --target i-085380fe9f01932b9 --region eu-west-1
 ```
 
-kill if running
+- can see processes on node
 
 ```sh
-ps aux | grep nvidia-cuda-mps-control
+Every 2.0s: nvidia-smi                                                                                              Mon Feb 24 18:28:18 2025
 
-echo "quit" | nvidia-cuda-mps-control
+Mon Feb 24 18:28:18 2025
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.144.03             Driver Version: 550.144.03     CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:00:1E.0 Off |                    0 |
+| N/A   36C    P0             32W /   70W |   13925MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A     36919      C   /usr/bin/ollama                              5562MiB |
+|    0   N/A  N/A     37400      C   /usr/bin/ollama                              8360MiB |
++-----------------------------------------------------------------------------------------+
 ```
 
 
-```sh
-export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps
-export CUDA_MPS_LOG_DIRECTORY=/tmp/nvidia-log
-nvidia-cuda-mps-control -d
-```
 
 
-
-### ingress
-
-```sh
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace ingress-nginx --create-namespace
-```
-
-
-### helm install
-
-
- install
-
-```sh
-helm repo add ollama-helm https://otwld.github.io/ollama-helm/
-helm repo update
-helm install ollama ollama-helm/ollama --namespace ollama --create-namespace --values ollama-values.yaml
-```
-
-update
-
-```sh
-# -- This pulls the latest version of the ollama chart from the repo.
-helm repo update
-helm upgrade ollama ollama-helm/ollama --namespace ollama --values ollama-values.yaml
-```
-
-Uninstalling
-
-```sh
-helm delete ollama --namespace ollama
-```
 
 
 ### **4️⃣ Deploy Two Ollama AI Models That Converse**

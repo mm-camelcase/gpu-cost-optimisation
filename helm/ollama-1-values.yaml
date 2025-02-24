@@ -22,6 +22,8 @@ extraEnv:
   - name: OLLAMA_DEBUG
     value: "1"
 
+service:
+  type: LoadBalancer
 
 # ingress:
 #   enabled: true
