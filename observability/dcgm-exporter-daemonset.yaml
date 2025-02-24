@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: dcgm-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: dcgm-exporter
+  template:
+    metadata:
+      labels:
+        app: dcgm-exporter
+    spec:
+      nodeSelector:
+        node-type: gpu  # Ensure it runs only on GPU nodes
+      tolerations:
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+        - name: dcgm-exporter
+          image: nvidia/dcgm-exporter:latest
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 9400
+          volumeMounts:
+            - mountPath: /run/containerd/containerd.sock  # Use containerd instead of Docker
+              name: containerd-sock
+            - mountPath: /dev
+              name: dev
+      volumes:
+        - name: containerd-sock
+          hostPath:
+            path: /run/containerd/containerd.sock  # Correct path for Bottlerocket
+        - name: dev
+          hostPath:
+            path: /dev

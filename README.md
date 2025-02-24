@@ -89,7 +89,10 @@ aws eks create-nodegroup \
   --labels node-type=cpu,system=true
 ```
 
-#### was --ami-type AL2_x86_64_GPU
+#### was 
+--ami-type BOTTLEROCKET_x86_64_NVIDIA
+
+
 
 
 ```sh
@@ -98,7 +101,7 @@ aws eks create-nodegroup \
   --nodegroup-name gpu-spot-nodes \
   --capacity-type SPOT \
   --instance-types g4dn.xlarge \
-  --ami-type BOTTLEROCKET_x86_64_NVIDIA \
+  --ami-type AL2_x86_64_GPU \
   --scaling-config minSize=0,maxSize=5,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
@@ -115,6 +118,10 @@ $ kubectl get nodes \
     --selector=node.kubernetes.io/instance-type=g4dn.xlarge \
     -o jsonpath="{.items[0].spec.taints[0]}" | jq .
 
+
+**Note:** bottlerocker works... needto install from scratch again to see what is required
+
+I uninstalled the nodes and reinstalledthem.... olama & nvid pods came up and just worked
 
 #### 
 

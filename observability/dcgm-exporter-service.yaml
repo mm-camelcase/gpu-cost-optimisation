@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dcgm-exporter
+  namespace: monitoring
+spec:
+  selector:
+    app: dcgm-exporter
+  ports:
+    - protocol: TCP
+      port: 9400
+      targetPort: 9400
+  type: ClusterIP  # Use ClusterIP since Prometheus is inside the cluster
