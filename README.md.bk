@@ -44,7 +44,6 @@ export SECURITY_GROUP_IDS="sg-0643b1246dd531666"
 export AWS_REGION="eu-west-1"
 ```
 
-
 ### **2️⃣ Deploy AWS EKS Cluster with Spot GPU Nodes**
 
 ```sh
@@ -55,7 +54,26 @@ aws eks create-cluster --name ollama-cluster \
   --region ${AWS_REGION}
 ```
 
-### **3️⃣ Deploy CPU Nodes for control plane**
+
+
+Create a **GPU-enabled Spot Node Group**:
+
+- check for AWS Deep Learning AMI (NVIDIA Drivers, CUDA, and container runtime are pre-installed)
+
+```sh
+aws ec2 describe-images \
+    --owners amazon \
+    --filters "Name=name,Values=Deep Learning Base AMI (Amazon Linux 2)*" \
+    --query 'Images | sort_by(@, &CreationDate) | [-1].{ImageId:ImageId, Name:Name}' \
+    --region eu-west-1
+
+{
+    "ImageId": "ami-0cca382104dfca6de",
+    "Name": "Deep Learning Base AMI (Amazon Linux 2) Version 60.9"
+}
+```
+
+- cpu node group for system pods
 
 ```sh
 aws eks create-nodegroup \
@@ -71,12 +89,11 @@ aws eks create-nodegroup \
   --labels node-type=cpu,system=true
 ```
 
-### **4️⃣ Deploy GPU-enabled Spot Node Group**
-
 #### was 
 - ami-type BOTTLEROCKET_x86_64_NVIDIA     --> no nvidia-cuda-mps-control    
 - ami-type AL2_x86_64_GPU       --> intermittent issues   
 - ami-type AL2023_X86_64_NVIDIA  --> doesnt work with g4dn.xlarge
+
 
 
 
@@ -95,27 +112,94 @@ aws eks create-nodegroup \
   --taints key=nvidia.com/gpu,value=present,effect=NO_SCHEDULE
 ```
 
-✅ **Spot Instances dramatically reduce GPU costs.**
 
-
-### **5️⃣ Enable CUDA MPS for Shared GPU Usage**
-
+- check 
 
 ```sh
-helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
-helm repo update
+$ kubectl get nodes \
+    --selector=node.kubernetes.io/instance-type=g4dn.xlarge \
+    -o jsonpath="{.items[0].spec.taints[0]}" | jq .
 
-helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
-  --namespace nvidia-device-plugin \
-  --create-namespace \
-  --version 0.17.0 \
-  --set gfd.enabled=true \
-  --values nvidia-values.yaml
 
-helm uninstall nvidia-device-plugin -n nvidia-device-plugin
+**Note:** bottlerocker works... needto install from scratch again to see what is required
+
+I uninstalled the nodes and reinstalledthem.... olama & nvid pods came up and just worked
+
+#### 
+
+```sh
+#kubectl describe daemonset aws-node -n kube-system | grep -A5 Tolerations
+#kubectl describe daemonset kube-proxy -n kube-system | grep -A5 Tolerations
+```
+
+both have have broad toleration (op=Exists), it means it tolerates all taints, including nvidia.com/gpu,value=present,effect=NO_SCHEDULE.
+
+```sh
+# kubectl patch daemonset aws-node -n kube-system --type='json' -p='[
+#   {
+#     "op": "replace",
+#     "path": "/spec/template/spec/tolerations",
+#     "value": [
+#       {
+#         "key": "node.kubernetes.io/not-ready",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       },
+#       {
+#         "key": "node.kubernetes.io/unreachable",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       }
+#     ]
+#   }
+# ]'
+```
+
+```sh
+# kubectl patch daemonset kube-proxy -n kube-system --type='json' -p='[
+#   {
+#     "op": "replace",
+#     "path": "/spec/template/spec/tolerations",
+#     "value": [
+#       {
+#         "key": "node.kubernetes.io/not-ready",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       },
+#       {
+#         "key": "node.kubernetes.io/unreachable",
+#         "operator": "Exists",
+#         "effect": "NoExecute"
+#       }
+#     ]
+#   }
+# ]'
+```
+
+### **3 Install Knative Serving on Your Cluster
+
+```sh
+#kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
 ```
 
 
+- install NVIDIA device plugin
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.1/nvidia-device-plugin.yml
+
+#kubectl apply -f https://github.com/knative/net-kourier/releases/latest/download/kourier.yaml
+
+# kubectl patch configmap/config-network \
+#   --namespace knative-serving \
+#   --type merge \
+#   --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+```
+
+
+✅ **Spot Instances dramatically reduce GPU costs.**
+
+### **4 Enable CUDA MPS for Shared GPU Usage**
 
 get instance idle
 
