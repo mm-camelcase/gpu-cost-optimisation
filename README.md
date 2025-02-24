@@ -45,7 +45,7 @@ export AWS_REGION="eu-west-1"
 ```
 
 
-### **2️⃣ Deploy AWS EKS Cluster with Spot GPU Nodes**
+### **2️⃣ Deploy AWS EKS Cluster**
 
 ```sh
 aws eks create-cluster --name ollama-cluster \
@@ -112,7 +112,7 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
   --set gfd.enabled=true \
   --values nvidia-values.yaml
 
-helm uninstall nvidia-device-plugin -n nvidia-device-plugin
+# helm uninstall nvidia-device-plugin -n nvidia-device-plugin
 ```
 
 ✅ **Allows multiple AI models to share one GPU dynamically.**
@@ -125,6 +125,9 @@ helm repo update
 
 helm upgrade -i ollama-1 ollama-helm/ollama --namespace ollama --create-namespace --values ollama-1-values.yaml
 helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespace --values ollama-2-values.yaml
+
+# helm uninstall ollama-1 --namespace ollama
+# helm uninstall ollama-2 --namespace ollama
 ```
 
 ### **7️⃣ Confirm instances are using GPU**
