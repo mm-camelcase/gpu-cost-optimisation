@@ -8,13 +8,14 @@ config:
             "resources": [
               {
                 "name": "nvidia.com/gpu",
-                "replicas": 2
+                "replicas": 4
               }
             ]
           }
         }
       }
-  default: default
+  default: "default"
+
 
 tolerations:
   - key: "nvidia.com/gpu"

@@ -1,15 +1,14 @@
-# GPU Cost Optimisation with CUDA MPS, MIG, and Knative Auto-Scaling
+# GPU Cost Optimisation with CUDA MPS, and Knative Auto-Scaling
 
 ## **Overview**
 
-This project demonstrates **cost-effective** ways to run GPU workloads on AWS without incurring excessive costs. By leveraging **CUDA Multi-Process Service (MPS), NVIDIA Multi-Instance GPU (MIG), Knative auto-scaling, and Spot Instances**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
+This project demonstrates **cost-effective** ways to run GPU workloads on AWS without incurring excessive costs. By leveraging **CUDA Multi-Process Service (MPS), Knative auto-scaling, and Spot Instances**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
 
 ## **Why This Project?**
 
 High-performance GPUs like NVIDIA A100 or H100 can be **prohibitively expensive** when running AI workloads. This project shows how to:
 
 - ✅ **Share a single GPU** between multiple AI models with **CUDA MPS**.
-- ✅ **Partition a GPU into isolated instances** using **NVIDIA MIG**.
 - ✅ **Automatically scale GPU workloads** to zero when idle using **Knative**.
 - ✅ **Use Spot Instances** to save up to **90% on GPU costs**.
 
@@ -28,11 +27,15 @@ To ensure clarity and modularity, the project is divided into separate directori
 
 - **Deploy GPU workloads on AWS EKS using Spot Instances.**
 - **Use CUDA MPS to run multiple AI models on a single GPU dynamically.**
-- **Implement NVIDIA MIG for strict GPU partitioning.**
 - **Auto-scale AI models to zero when idle using Knative Serving.**
 - **Deploy two Ollama AI models that converse with each other on the same GPU.**
 
 ## **Setup Guide**
+
+- divide this into 2
+
+    - configure/setup gpu for workloads (watch v. again)
+    - deploy ai
 
 ### **1️⃣ Set Environment Variables**
 
@@ -43,7 +46,6 @@ export SUBNET_IDS="subnet-0bcd6d51,subnet-59f5923f"
 export SECURITY_GROUP_IDS="sg-0643b1246dd531666"
 export AWS_REGION="eu-west-1"
 ```
-
 
 ### **2️⃣ Deploy AWS EKS Cluster**
 
@@ -97,6 +99,12 @@ aws eks create-nodegroup \
 
 ✅ **Spot Instances dramatically reduce GPU costs.**
 
+1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣ 🔟
+
+
+### **5️⃣ Configure 
+
+aws eks update-kubeconfig --region eu-west-1 --name ollama-cluster
 
 ### **5️⃣ Enable CUDA MPS for Shared GPU Usage**
 
@@ -194,6 +202,8 @@ Mon Feb 24 18:28:18 2025
 
 ### **4️⃣ Deploy Two Ollama AI Models That Converse**
 
+here are 2 ais chatting (plotting)
+
 <!-- point `kubectl` at cluster
 
 ```sh
@@ -288,7 +298,7 @@ aws eks list-nodegroups --cluster-name ollama-cluster --region ${AWS_REGION}
 
 ## **Future Enhancements**
 
-- ✅ Upgrade to **MIG on A100 GPUs (p4d.24xlarge)** for strict isolation.
+- ✅ Upgrade to **MIG on A100 GPUs (p4d.24xlarge)** for strict isolation (i.e. Partition a GPU into isolated instances using NVIDIA MIG).
 - ✅ Optimise startup times with **Spot Instance auto-scaling**.
 - 🔜 Introduce **real-time streaming responses**.
 - 🔜 Deploy a third chatbot with a different AI model for more diversity.

@@ -6,9 +6,9 @@ ollama:
     number: 1
   resources:
     limits:
-      nvidia.com/gpu: 0.5  # Allocates half of the GPU to this instance
+      nvidia.com/gpu: 1
     requests:
-      nvidia.com/gpu: 0.5  # Requests half of the GPU
+      nvidia.com/gpu: 1
 
    
   # -- List of models to pull at container startup
