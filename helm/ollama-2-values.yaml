@@ -22,24 +22,6 @@ extraEnv:
   - name: OLLAMA_DEBUG
     value: "1"
 
+service:
+  type: LoadBalancer
 
-# ingress:
-#   enabled: true
-#   className: "nginx"
-#   hosts:
-#   - host: ollama.camelcase.club  # Replace with your public IP or domain
-#     paths:
-#       - path: /mistral
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: ollama
-#             port:
-#               number: 11434
-#       - path: /llama2
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: ollama
-#             port:
-#               number: 11434
