@@ -104,9 +104,41 @@ aws eks create-nodegroup \
 
 ### **5️⃣ Configure 
 
+```sh
 aws eks update-kubeconfig --region eu-west-1 --name ollama-cluster
+```
 
 ### **5️⃣ Enable CUDA MPS for Shared GPU Usage**
+
+- First, check if your GPU nodes support MPS by running:
+
+```sh
+nvidia-smi -q | grep "Compute Mode"
+```
+
+- If it returns "Default", you need to switch it to "Exclusive Process" for MPS to work:
+
+```sh
+sudo nvidia-smi -c EXCLUSIVE_PROCESS
+```
+
+- Enable the MPS Daemon in Your GPU Nodes
+
+```sh
+sudo nvidia-cuda-mps-control -d
+```
+
+To verify MPS is running:
+
+```sh
+sudo nvidia-cuda-mps-control -d
+```
+
+- it will return an  MPS daemon is running but no processes are using MPS yet.
+- process list if processes are using MPS
+- "Cannot find MPS control daemon process" if it is not running
+
+
 
 
 ```sh
