@@ -86,10 +86,10 @@ aws eks create-nodegroup \
 aws eks create-nodegroup \
   --cluster-name ollama-cluster \
   --nodegroup-name gpu-spot-nodes \
-  --capacity-type ON_DEMAND \
+  --capacity-type SPOT \
   --instance-types g4dn.xlarge \
   --ami-type AL2_x86_64_GPU \
-  --scaling-config minSize=0,maxSize=5,desiredSize=1 \
+  --scaling-config minSize=0,maxSize=1,desiredSize=1 \
   --node-role arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSNodeRole \
   --subnets  ${SUBNET_IDS//,/ } \
   --region ${AWS_REGION} \
