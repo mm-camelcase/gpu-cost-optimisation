@@ -1,0 +1,26 @@
+config:
+  map:
+    default: |-
+      {
+        "version": "v1",
+        "sharing": {
+          "mps": {
+            "resources": [
+              {
+                "name": "nvidia.com/gpu",
+                "replicas": 2
+              }
+            ]
+          }
+        }
+      }
+  default: "default"
+
+
+tolerations:
+  - key: "nvidia.com/gpu"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+nodeSelector:
+  node-type: "gpu"

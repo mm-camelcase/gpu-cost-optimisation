@@ -118,7 +118,7 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
   --create-namespace \
   --version 0.17.0 \
   --set gfd.enabled=true \
-  --values cuda-time-slicing-values.yaml
+  --values cuda-mps-values.yaml
 
 # helm uninstall nvidia-device-plugin -n nvidia-device-plugin
 ```
