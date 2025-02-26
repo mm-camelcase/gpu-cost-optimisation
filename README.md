@@ -86,7 +86,7 @@ aws eks create-nodegroup \
 aws eks create-nodegroup \
   --cluster-name ollama-cluster \
   --nodegroup-name gpu-spot-nodes \
-  --capacity-type SPOT \
+  --capacity-type ON_DEMAND \
   --instance-types g4dn.xlarge \
   --ami-type AL2_x86_64_GPU \
   --scaling-config minSize=0,maxSize=1,desiredSize=1 \
