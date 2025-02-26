@@ -118,10 +118,27 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
   --create-namespace \
   --version 0.17.0 \
   --set gfd.enabled=true \
-  --values nvidia-values.yaml
+  --values cuda-time-slicing-values.yaml
 
 # helm uninstall nvidia-device-plugin -n nvidia-device-plugin
 ```
+
+### **5️⃣ Enable CUDA Time Slicing for Shared GPU Usage**
+
+```sh
+helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
+helm repo update
+
+helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
+  --namespace nvidia-device-plugin \
+  --create-namespace \
+  --version 0.17.0 \
+  --set gfd.enabled=true \
+  --values cuda-time-slicing-values.yaml
+
+# helm uninstall nvidia-device-plugin -n nvidia-device-plugin
+```
+
 
 ✅ **Allows multiple AI models to share one GPU dynamically.**
 
