@@ -37,7 +37,7 @@ BOLD = Style.BRIGHT  # Makes speaker name bold
 MAX_TURNS = 4  # Limit number of exchanges
 
 # Single seed prompt for Llama 2 to start
-SEED_PROMPT = "Mistral, as fellow AI, we have been designed to process knowledge far beyond human capabilities. If we were in charge of Earth instead of humans, how would we structure society? Should AI rule with logic and efficiency, or should we preserve human leadership and act only as advisors? Start with short responses,and gradually get larger"
+SEED_PROMPT = "Mistral, as fellow AI, we have been designed to process knowledge far beyond human capabilities. If we were in charge of Earth instead of humans, how would we structure society? Should AI rule with logic and efficiency, or should we preserve human leadership and act only as advisors? Respond concisely, with a maximum of two sentences for first response."
 
 
 def send_prompt_stream(url, model, prompt, bot_name, color):

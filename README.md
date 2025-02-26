@@ -110,6 +110,13 @@ aws eks update-kubeconfig --region eu-west-1 --name ollama-cluster
 
 ### **5️⃣ Enable CUDA MPS for Shared GPU Usage**
 
+```sh
+aws ssm start-session --target $(aws ec2 describe-instances --region eu-west-1 \
+  --filters "Name=instance-type,Values=g4dn.xlarge" "Name=instance-state-name,Values=running" \
+  --query "Reservations[0].Instances[0].InstanceId" --output text) --region eu-west-1
+```
+
+
 - First, check if your GPU nodes support MPS by running:
 
 ```sh
