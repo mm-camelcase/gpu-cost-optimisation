@@ -42,6 +42,7 @@ High-performance GPUs like NVIDIA A100 or H100 can be **prohibitively expensive*
 <img src="gpu-time-slicing.gif" width="300"/>  
 
 ![Infrastructure](gpu-time-slicing.gif)
+**Figure 1:** This is the description of the image.
 
 <figure>
   <img src="gpu-time-slicing.gif" alt="Description of Image">
