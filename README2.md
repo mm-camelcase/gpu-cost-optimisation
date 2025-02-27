@@ -34,20 +34,14 @@ High-performance GPUs like NVIDIA A100 or H100 can be **prohibitively expensive*
 ## **Key Features**
 
 - **Deploy GPU workloads on AWS EKS using Spot Instances.**
-- **Use CUDA MPS to run multiple AI models on a single GPU dynamically.**
-- **Compare CUDA MPS vs. Time Slicing and observe performance differences.**
-- **Deploy two Ollama AI models that converse with each other on the same GPU.**
+- **Use NVEDIA CUDA to run multiple AI models on a single GPU dynamically.**
 - **Real-time monitoring of GPU usage with NVIDIA-SMI.**
+- **Compare CUDA MPS vs. Time Slicing and observe performance differences.**
 
-<img src="gpu-time-slicing.gif" width="300"/>  
 
 ![Infrastructure](gpu-time-slicing.gif)
-**Figure 1:** This is the description of the image.
+**Figure 1:**2 Ollama AI models ~~plotting~~ conversing with each other on the same GPU.
 
-<figure>
-  <img src="gpu-time-slicing.gif" alt="Description of Image">
-  <figcaption>**Figure 1:** This is the description of the image.</figcaption>
-</figure>
 
 
 ## **Setup Guide**
