@@ -8,11 +8,11 @@ AI workloads perform significantly better on GPUs compared to CPUs, as GPUs are 
 
 To effectively utilize GPUs in Kubernetes, we need to perform three key tasks:
 
-- **Provision GPU nodes**: Create nodes or node groups with GPU support in our EKS cluster.
-- **Enable GPU access**: Install device plugins that allow pods to use specialized hardware features like GPUs.
-- **Configure GPU usage in pods**: Ensure that workloads explicitly request and leverage GPU resources.
+- 1️⃣ **Provision GPU nodes**: Create nodes or node groups with GPU support in our EKS cluster.
+- 2️⃣ **Enable GPU access**: Install device plugins that allow pods to use specialized hardware features like GPUs.
+- 3️⃣ **Configure GPU usage in pods**: Ensure that workloads explicitly request and leverage GPU resources.
 
-This project demonstrates **cost-effective** ways to run GPU workloads on AWS without incurring excessive costs. By leveraging **CUDA Multi-Process Service (MPS) and Spot Instances**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
+This project demonstrates **cost-effective** ways to run GPU workloads on AWS without incurring excessive costs. By leveraging **NVIDIA device plugin for Kubernetes's GPU sharing features**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
 
 ## **Why This Project?**
 
@@ -109,14 +109,14 @@ todo explain taints, lables, AL2_x86_64_GPU, g4dn.xlarge, spot (add/diss)
 
 To enable GPU access in Kubernetes, you need to install the NVIDIA K8s Device Plugin from:
 
-👉 NVIDIA/k8s-device-plugin
+👉 [NVIDIA/k8s-device-plugin](https://github.com/NVIDIA/k8s-device-plugin)
 
 **Why Do You Need This?**
-- The NVIDIA GPU device plugin allows Kubernetes to detect and allocate GPUs to your workloads.
+- The **NVIDIA GPU device plugin** allows Kubernetes to detect and allocate GPUs to your workloads.
 - Without this plugin, Kubernetes won’t recognize GPUs, even if your node has an NVIDIA GPU.
-- Required for both CUDA MPS and Time-Slicing configurations.
+- Required for both GPU sharing features.
+- There are two mutually exclusive flavors of sharing available, **Time-Slicing** and **Multi-Process Service (MPS)**. 
 
-There are two flavors of sharing available: Time-Slicing and MPS. Time-slicing and MPS are mutually exclusive.
 
 #### **Enable CUDA Time Slicing for Shared GPU Usage**
 
