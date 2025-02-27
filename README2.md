@@ -39,6 +39,8 @@ High-performance GPUs like NVIDIA A100 or H100 can be **prohibitively expensive*
 - **Deploy two Ollama AI models that converse with each other on the same GPU.**
 - **Real-time monitoring of GPU usage with NVIDIA-SMI.**
 
+<img src="gpu-time-slicing.gif" width="300"/>
+
 ## **Setup Guide**
 
 ### **1️⃣ Provision GPU Nodes**
@@ -138,7 +140,11 @@ sudo nvidia-smi -c EXCLUSIVE_PROCESS
 sudo nvidia-cuda-mps-control -d
 ```
 
+- Enable the MPS Daemon in Your GPU Nodes (todo: why)
 
+```sh
+sudo nvidia-cuda-mps-control -d
+```
 
 ### **3️⃣ Configure GPU Usage in Pods**
 
