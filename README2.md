@@ -18,9 +18,9 @@ This project demonstrates **cost-effective** ways to run GPU workloads on AWS wi
 
 High-performance GPUs like NVIDIA A100 or H100 can be **prohibitively expensive** when running AI workloads. This project shows how to:
 
-- ✅ **Share a single GPU** between multiple AI models with **CUDA MPS**.
+- ✅ **Share a single GPU** between multiple AI models with **CUDA**(Compute Unified Device Architecture).
+- ✅ **Compare CUDA MPS and CUDA time slicing** for shared GPU usage.
 - ✅ **Use Spot Instances** to save up to **90% on GPU costs**.
-- ✅ **Compare CUDA MPS and time slicing** for shared GPU usage.
 
 ## **Project Structure**
 ```
@@ -149,6 +149,18 @@ sudo nvidia-cuda-mps-control -d
 sudo nvidia-cuda-mps-control -d
 ```
 
+```sh
+helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
+helm repo update
+
+helm upgrade -i nvidia-device-plugin nvdp/nvidia.github.io/k8s-device-plugin \
+  --namespace nvidia-device-plugin \
+  --create-namespace \
+  --version 0.17.0 \
+  --set gfd.enabled=true \
+  --values cuda/cuda-mps-values.yaml
+```
+
 ### **3️⃣ Configure GPU Usage in Pods**
 
 Install Two Ollama AI Instances:
@@ -162,12 +174,17 @@ helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespac
 
 ## **CUDA MPS vs. Time Slicing**
 
-| Feature             | CUDA MPS                                       | Time Slicing                              |
-| ------------------- | ---------------------------------------------- | ----------------------------------------- |
-| **Concurrency**     | Multiple processes run concurrently            | GPU access is divided into time intervals |
-| **Performance**     | High throughput due to shared execution        | Increased latency from context switching  |
-| **Use Case**        | Ideal for AI inference and real-time workloads | Suitable for isolated workloads           |
-| **GPU Utilization** | Optimized for maximum usage                    | Can lead to underutilization              |
+| Feature               | Time-Slicing                                 | MPS                                          |
+|---------------------- |------------------------------------------- |--------------------------------------------- |
+| **Process Switching** | Alternates (one at a time)                 | Runs concurrently                            |
+| **GPU Utilization**   | Spikes (100% → 0%)                         | Steady (e.g., 50%)                          |
+| **Total Utilization** | ~100% but fluctuates                       | ~100% and stable                            |
+| **Latency**          | Higher (switching overhead)                 | Lower                                       |
+| **Best For**         | Large independent workloads                 | Smaller, parallel workloads                 |
+| **Memory Sharing**   | ❌ No                                        | ✅ Yes (some overlap)                        |
+| **Memory Efficiency**| 🟡 Medium                                   | 🟢 High                                     |
+| **Total Memory Usage** | Sum of all processes                     | Slightly less than the sum                  |
+| **Risk of Starvation** | ❌ No                                      | ⚠️ Possible if not managed                  |
 
 ## **Visual Demonstrations**
 
@@ -201,4 +218,9 @@ This project successfully demonstrates **how CUDA MPS and time slicing impact GP
 ---
 
 🚀 Would you like to see more benchmarks? Let us know!
+
+
+## **TODO**
+-  mention in this case weuse aws but...
+- links to https://github.com/NVIDIA/k8s-device-plugin
 
