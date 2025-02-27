@@ -39,7 +39,9 @@ High-performance GPUs like NVIDIA A100 or H100 can be **prohibitively expensive*
 - **Deploy two Ollama AI models that converse with each other on the same GPU.**
 - **Real-time monitoring of GPU usage with NVIDIA-SMI.**
 
-<img src="gpu-time-slicing.gif" width="300"/>
+<img src="gpu-time-slicing.gif" width="300"/>  
+
+![Infrastructure](gpu-time-slicing.gif)
 
 ## **Setup Guide**
 
