@@ -164,6 +164,8 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
 
 ### **5️⃣ Enable CUDA Time Slicing for Shared GPU Usage**
 
+https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#with-cuda-time-slicing
+
 ```sh
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
 helm repo update
@@ -180,6 +182,8 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia-device-plugin \
 
 
 ✅ **Allows multiple AI models to share one GPU dynamically.**
+
+https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#with-cuda-mps
 
 ### **6️⃣ Install Two separate Ollama instances**
 
