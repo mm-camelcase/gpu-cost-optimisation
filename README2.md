@@ -107,6 +107,17 @@ todo explain taints, lables, AL2_x86_64_GPU, g4dn.xlarge, spot (add/diss)
 
 ### **2️⃣ Enable GPU Access**
 
+To enable GPU access in Kubernetes, you need to install the NVIDIA K8s Device Plugin from:
+
+👉 NVIDIA/k8s-device-plugin
+
+**Why Do You Need This?**
+- The NVIDIA GPU device plugin allows Kubernetes to detect and allocate GPUs to your workloads.
+- Without this plugin, Kubernetes won’t recognize GPUs, even if your node has an NVIDIA GPU.
+- Required for both CUDA MPS and Time-Slicing configurations.
+
+There are two flavors of sharing available: Time-Slicing and MPS. Time-slicing and MPS are mutually exclusive.
+
 #### **Enable CUDA Time Slicing for Shared GPU Usage**
 
 ```sh
