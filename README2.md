@@ -2,17 +2,17 @@
 
 ## **Overview**
 
-Kubernetes has become the de facto standard for managing all types of workloads, providing scalability, automation, and efficient resource management.
+**Kubernetes** has become the **de facto standard** for managing all types of workloads, providing scalability, automation, and efficient resource management.
 
 AI workloads perform significantly better on GPUs compared to CPUs, as GPUs are optimized for parallel processing, which is essential for deep learning and inference tasks.
 
 To effectively utilize GPUs in Kubernetes, we need to perform three key tasks:
 
-- 1️⃣ **Provision GPU nodes**: Create nodes or node groups with GPU support in our EKS cluster.
+- 1️⃣ **Provision GPU nodes**: Create nodes or node groups with **GPU support** in our **K8S Cluster**.
 - 2️⃣ **Enable GPU access**: Install device plugins that allow pods to use specialized hardware features like GPUs.
 - 3️⃣ **Configure GPU usage in pods**: Ensure that workloads explicitly request and leverage GPU resources.
 
-This project demonstrates **cost-effective** ways to run GPU workloads on AWS without incurring excessive costs. By leveraging **NVIDIA device plugin for Kubernetes's GPU sharing features**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
+This project demonstrates cost-effective ways to run GPU workloads, using AWS in this case, but these methods can be applied to any cloud provider. By leveraging **NVIDIA device plugin for Kubernetes's GPU sharing features**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
 
 ## **Why This Project?**
 
