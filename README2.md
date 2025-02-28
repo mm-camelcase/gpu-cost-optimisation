@@ -12,14 +12,14 @@ To effectively utilize GPUs in Kubernetes, we need to perform three key tasks:
 - 2️⃣ **Enable GPU access**: Install device plugins that allow pods to use specialized hardware features like GPUs.
 - 3️⃣ **Configure GPU usage in pods**: Ensure that workloads explicitly request and leverage GPU resources.
 
-This project demonstrates cost-effective ways to run GPU workloads, using AWS in this case, but these methods can be applied to any cloud provider. By leveraging **NVIDIA device plugin for Kubernetes's GPU sharing features**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
+This project demonstrates cost-effective ways to run GPU workloads, using AWS in this case, but these methods can be applied to any cloud provider. By leveraging **NVIDIA device plugin** for **Kubernetes's GPU sharing features**, we can efficiently share GPU resources across multiple workloads while **minimising expenses**.
 
 ## **Why This Project?**
 
-High-performance GPUs like NVIDIA A100 or H100 can be **prohibitively expensive** when running AI workloads. This project shows how to:
+High-performance GPUs like **NVIDIA A100** or **H100** can be **prohibitively expensive** when running AI workloads. This project shows how to:
 
 - ✅ **Share a single GPU** between multiple AI models with **CUDA**(Compute Unified Device Architecture).
-- ✅ **Compare CUDA MPS and CUDA time slicing** for shared GPU usage.
+- ✅ Compare **CUDA MPS** and **CUDA Time Slicing** for shared GPU usage.
 - ✅ **Use Spot Instances** to save up to **90% on GPU costs**.
 
 ## **Project Structure**
