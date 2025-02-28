@@ -4,9 +4,9 @@
 
 **Kubernetes** has become the **de facto standard** for managing all types of workloads, providing scalability, automation, and efficient resource management.
 
-AI workloads perform significantly better on GPUs compared to CPUs, as GPUs are optimized for parallel processing, which is essential for deep learning and inference tasks.
+**AI workloads** perform significantly better on **GPUs** compared to CPUs, as GPUs are optimized for parallel processing, which is essential for deep learning and inference tasks.
 
-To effectively utilize GPUs in Kubernetes, we need to perform three key tasks:
+To effectively utilize **GPUs** in **Kubernetes**, we need to perform three key tasks:
 
 - 1️⃣ **Provision GPU nodes**: Create nodes or node groups with **GPU support** in our **K8S Cluster**.
 - 2️⃣ **Enable GPU access**: Install device plugins that allow pods to use specialized hardware features like GPUs.
@@ -33,10 +33,10 @@ High-performance GPUs like **NVIDIA A100** or **H100** can be **prohibitively ex
 
 ## **Key Features**
 
-- **Deploy GPU workloads on AWS EKS using Spot Instances.**
-- **Use NVEDIA CUDA to run multiple AI models on a single GPU dynamically.**
-- **Real-time monitoring of GPU usage with NVIDIA-SMI.**
-- **Compare CUDA MPS vs. Time Slicing and observe performance differences.**
+- Deploy **GPU workloads** on **AWS EKS** using **Spot Instances**.
+- Use **NVEDIA CUDA** to run **multiple AI models** on a **single GPU** dynamically.
+- Real-time **monitoring** of GPU usage with **NVIDIA-SMI**.
+- Compare **CUDA MPS vs. Time Slicing** and observe performance differences.
 
 
 ![Infrastructure](gpu-time-slicing.gif)
