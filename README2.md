@@ -203,10 +203,26 @@ Verify the current GPU compute mode:
 nvidia-smi -q | grep "Compute Mode"
 ```
 If it returns `Default`, switch to `Exclusive Process` mode for MPS:
+
+By default, most GPUs operate in **Default Compute Mode**, which allows multiple processes to use the GPU but prevents true concurrent execution. **Exclusive Process Mode** ensures that each CUDA application has exclusive access to a GPU partition, which is necessary for **MPS** to function efficiently.
+
+- **Why is this needed?**
+  - **Default Mode** does not allow efficient GPU sharing under MPS.
+  - **Exclusive Process Mode** enables multiple processes to share GPU resources dynamically without blocking each other.
+  - MPS **reduces context switching overhead** and **improves overall performance** when multiple workloads run simultaneously.  
+
 ```sh
 sudo nvidia-smi -c EXCLUSIVE_PROCESS
 ```
 Enable the **MPS Daemon**:
+
+The **MPS Daemon** (Multi-Process Service Daemon) is a background process that enables multiple CUDA applications to share a GPU concurrently. It helps optimize GPU utilization by allowing multiple workloads to execute in parallel instead of time-slicing between them.
+
+**Why is this needed?**
+- Without the MPS daemon, CUDA workloads execute sequentially when running on a shared GPU.
+- MPS enables **lower-latency, parallel execution** of multiple workloads, improving GPU efficiency.
+- It allows AI models and inference tasks to share GPU memory and compute resources dynamically.
+
 ```sh
 sudo nvidia-cuda-mps-control -d
 ```
