@@ -119,21 +119,27 @@ aws eks create-nodegroup \
 
 ✅ **Spot Instances reduce GPU costs significantly but may not be suitable for workloads requiring guaranteed availability.**
 
-### **2️⃣ Enable GPU Access**
+## **2️⃣ Enable GPU Access**
 
-To enable GPU access in Kubernetes, you need to install the NVIDIA K8s Device Plugin from:
+### **Install NVIDIA K8s Device Plugin**
+
+To enable **GPU access** in Kubernetes, install the **NVIDIA K8s Device Plugin** from:
 
 👉 [NVIDIA/k8s-device-plugin](https://github.com/NVIDIA/k8s-device-plugin)
 
-**Why Do You Need This?**
-- The **NVIDIA GPU device plugin** allows Kubernetes to detect and allocate GPUs to your workloads.
-- Without this plugin, Kubernetes won’t recognize GPUs, even if your node has an NVIDIA GPU.
-- Required for both GPU sharing features.
-- There are two mutually exclusive flavors of sharing available, **Time-Slicing** and **Multi-Process Service (MPS)**. 
+#### **Why Do You Need This?**
+- The **NVIDIA GPU device plugin** allows Kubernetes to **detect and allocate GPUs** to workloads.
+- Without this plugin, Kubernetes won’t recognize GPUs, even if a node has an **NVIDIA GPU**.
+- Required for both **GPU sharing** features.
+- There are two mutually exclusive modes of GPU sharing: **Time-Slicing** and **Multi-Process Service (MPS)**.
 
+---
 
-#### **Enable CUDA Time Slicing for Shared GPU Usage**
+## **Option 1: Enable CUDA Time Slicing**
 
+CUDA **Time Slicing** allows multiple workloads to share a single GPU by allocating usage time slots.
+
+### **Step 1: Deploy NVIDIA Device Plugin with Time Slicing**
 ```sh
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
 helm repo update
@@ -146,34 +152,66 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia.github.io/k8s-device-plugin \
   --values cuda/cuda-time-slicing-values.yaml
 ```
 
-#### **Enable CUDA MPS for Shared GPU Usage**
+### **Step 2: Configure Time Slicing**
+The configuration file **cuda/cuda-time-slicing-values.yaml** enables GPU sharing by defining how many workloads can run simultaneously on the same GPU.
 
-- Jump to GPU Node using SSM:
+#### **Configuration Example**
+```yaml
+config:
+  map:
+    default: |-
+      {
+        "version": "v1",
+        "sharing": {
+          "timeSlicing": {
+            "resources": [
+              {
+                "name": "nvidia.com/gpu",
+                "replicas": 4
+              }
+            ]
+          }
+        }
+      }
+  default: "default"
+```
 
+#### **Explanation**
+- **`"name": "nvidia.com/gpu"`** → Defines the GPU resource type recognized by Kubernetes.
+- **`"replicas": 4`** → Allows up to **4 workloads** to share the same physical GPU by assigning time slices.
+- **`"timeSlicing"`** → Enables GPU time-sharing rather than exclusive access per workload.
+
+✅ **Use Case:** Suitable for large independent workloads that don't require concurrent GPU execution.
+
+---
+
+## **Option 2: Enable CUDA MPS (Multi-Process Service)**
+
+CUDA **MPS** allows multiple workloads to share a GPU **concurrently**, optimizing memory and compute utilization.
+
+### **Step 1: Connect to GPU Node**
+Before enabling MPS, access a GPU node using **AWS Systems Manager (SSM)**:
 ```sh
 aws ssm start-session --target $(aws ec2 describe-instances --region eu-west-1 \
   --filters "Name=instance-type,Values=g4dn.xlarge" "Name=instance-state-name,Values=running" \
   --query "Reservations[0].Instances[0].InstanceId" --output text) --region eu-west-1
 ```
-- First, check if your GPU nodes support MPS by running:
 
+### **Step 2: Check GPU Compute Mode**
+Verify the current GPU compute mode:
 ```sh
 nvidia-smi -q | grep "Compute Mode"
 ```
-
-- If it returns ``Default``, you need to switch it to ``Exclusive Process`` for MPS to work:
-
+If it returns `Default`, switch to `Exclusive Process` mode for MPS:
 ```sh
 sudo nvidia-smi -c EXCLUSIVE_PROCESS
-sudo nvidia-cuda-mps-control -d
 ```
-
-- Enable the MPS Daemon in Your GPU Nodes (todo: why)
-
+Enable the **MPS Daemon**:
 ```sh
 sudo nvidia-cuda-mps-control -d
 ```
 
+### **Step 3: Deploy NVIDIA Device Plugin with MPS**
 ```sh
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
 helm repo update
@@ -185,6 +223,52 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia.github.io/k8s-device-plugin \
   --set gfd.enabled=true \
   --values cuda/cuda-mps-values.yaml
 ```
+
+### **Step 4: Configure MPS**
+The configuration file **cuda/cuda-mps-values.yaml** enables **multi-process service**, allowing concurrent execution of multiple workloads on a single GPU.
+
+#### **Configuration Example**
+```yaml
+config:
+  map:
+    default: |-
+      {
+        "version": "v1",
+        "sharing": {
+          "mps": {
+            "resources": [
+              {
+                "name": "nvidia.com/gpu",
+                "replicas": 2
+              }
+            ]
+          }
+        }
+      }
+  default: "default"
+```
+
+#### **Explanation**
+- **`"mps"`** → Enables CUDA Multi-Process Service (MPS).
+- **`"replicas": 2`** → Allows **two workloads** to run **concurrently** on the same GPU.
+- **More efficient memory utilization** compared to time-slicing.
+
+✅ **Use Case:** Ideal for AI inference and workloads that benefit from concurrent execution.
+
+---
+
+### **Choosing Between Time Slicing and MPS**
+| Feature              | Time-Slicing                           | MPS                                      |
+|---------------------|-------------------------------------|-----------------------------------------|
+| Process Execution  | Alternates workloads sequentially  | Runs multiple workloads in parallel    |
+| GPU Utilization    | Varies between 0% and 100%         | Maintains steady utilization           |
+| Memory Efficiency  | Medium                              | High                                   |
+| Best For           | Large, independent workloads       | Smaller, parallel workloads            |
+| Latency            | Higher due to context switching    | Lower due to concurrent execution      |
+
+🔹 **Choose Time-Slicing** if workloads are independent and don’t need parallel execution.
+🔹 **Choose MPS** if workloads require efficient GPU sharing with lower latency.
+
 
 ### **3️⃣ Configure GPU Usage in Pods**
 
