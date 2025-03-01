@@ -316,7 +316,7 @@ ollama:
   gpu:
     enabled: true             # Enables GPU usage
     type: 'nvidia'            # Specifies NVIDIA GPU type
-    number: 1                 # Requests one GPU per pod
+    number: 1                 # Required by chart, set to same value as resources.limits.nvidia.com/gpu below
   resources:
     limits:
       nvidia.com/gpu: 1       # Maximum GPU resources assigned
