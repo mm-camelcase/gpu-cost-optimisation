@@ -48,9 +48,9 @@ High-performance GPUs like **NVIDIA A100** or **H100** can be **prohibitively ex
 
 ### **1️⃣ Provision GPU Nodes**
 
-Ensure your environment is correctly set up before deployment:
+#### **Step 1: Set Up Required Environment Variables**
 
-todo: prec
+Before deploying the cluster, set the following environment variables:
 
 ```sh
 export AWS_ACCOUNT_ID="<aws-acccount-id>"
@@ -59,7 +59,13 @@ export SECURITY_GROUP_IDS="sg-0643b1246dd531666"
 export AWS_REGION="eu-west-1"
 ```
 
-Deploy a standard AWS EKS Cluster:
+- **SUBNET_IDS**: Specifies the AWS subnets where the EKS cluster will be deployed. Ensure that these subnets are in a VPC with internet connectivity or the necessary private network access.
+- **SECURITY_GROUP_IDS**: Defines the security groups that control inbound and outbound traffic to the EKS cluster. These should allow necessary Kubernetes communication and node access.
+
+#### **Step 2: Deploy an AWS EKS Cluster**
+
+Create the EKS cluster that will host GPU workloads:
+
 ```sh
 aws eks create-cluster --name ollama-cluster \
   --role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/EKSClusterRole \
@@ -68,7 +74,7 @@ aws eks create-cluster --name ollama-cluster \
   --region ${AWS_REGION}
 ```
 
-Deploy CPU Nodes for Control Plane:
+#### **Step 3: Deploy CPU Nodes for the Control Plane**
 
 ```sh
 aws eks create-nodegroup \
@@ -83,9 +89,13 @@ aws eks create-nodegroup \
   --region ${AWS_REGION} \
   --labels node-type=cpu,system=true
 ```
-   
 
-Deploy GPU-enabled Spot Node Group:
+- **`--labels node-type=cpu,system=true`**: Labels are metadata tags that help Kubernetes schedule workloads effectively. In this case:
+  - `node-type=cpu` ensures the node group is identified as a CPU-based system.
+  - `system=true` may be used to indicate nodes dedicated for system-level workloads, such as control plane operations or background services.
+
+#### **Step 4: Deploy GPU-enabled Spot Node Group**
+
 ```sh
 aws eks create-nodegroup \
   --cluster-name ollama-cluster \
@@ -101,9 +111,13 @@ aws eks create-nodegroup \
   --taints key=nvidia.com/gpu,value=present,effect=NO_SCHEDULE
 ```
 
-todo explain taints, lables, AL2_x86_64_GPU, g4dn.xlarge, spot (add/diss)
+- **Spot Instances (`--capacity-type SPOT`)**: AWS Spot Instances allow you to run workloads at a significantly reduced cost compared to on-demand pricing. However, they can be interrupted if AWS reclaims the capacity.
+- **GPU Instance Type (`--instance-types g4dn.xlarge`)**: The `g4dn.xlarge` instance provides a single NVIDIA T4 GPU, making it cost-effective for AI inference and smaller training workloads.
+- **AMI Type (`--ami-type AL2_x86_64_GPU`)**: Specifies an Amazon Linux 2 AMI that comes with NVIDIA drivers pre-installed.
+- **Labels (`--labels node-type=gpu`)**: Helps Kubernetes identify that this node group is GPU-based, so it can be scheduled appropriately.
+- **Taints (`--taints key=nvidia.com/gpu,value=present,effect=NO_SCHEDULE`)**: Ensures that only workloads requesting GPUs are scheduled on these nodes.
 
-✅ **Spot Instances dramatically reduce GPU costs.**
+✅ **Spot Instances reduce GPU costs significantly but may not be suitable for workloads requiring guaranteed availability.**
 
 ### **2️⃣ Enable GPU Access**
 
