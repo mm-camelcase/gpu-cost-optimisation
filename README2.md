@@ -272,19 +272,7 @@ config:
 
 ✅ **Use Case:** Ideal for AI inference and workloads that benefit from concurrent execution.
 
----
 
-### **Choosing Between Time Slicing and MPS**
-| Feature              | Time-Slicing                           | MPS                                      |
-|---------------------|-------------------------------------|-----------------------------------------|
-| Process Execution  | Alternates workloads sequentially  | Runs multiple workloads in parallel    |
-| GPU Utilization    | Varies between 0% and 100%         | Maintains steady utilization           |
-| Memory Efficiency  | Medium                              | High                                   |
-| Best For           | Large, independent workloads       | Smaller, parallel workloads            |
-| Latency            | Higher due to context switching    | Lower due to concurrent execution      |
-
-🔹 **Choose Time-Slicing** if workloads are independent and don’t need parallel execution.
-🔹 **Choose MPS** if workloads require efficient GPU sharing with lower latency.
 
 
 ### **3️⃣ Configure GPU Usage in Pods**
@@ -334,6 +322,9 @@ helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespac
 
 ✅ **This ensures each Ollama AI instance is scheduled on a node with an available GPU, utilizing Kubernetes’ GPU scheduling features.**
 
+
+
+
 ## **CUDA MPS vs. Time Slicing**
 
 | Feature               | Time-Slicing                                 | MPS                                          |
@@ -347,6 +338,20 @@ helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespac
 | **Memory Efficiency**| 🟡 Medium                                   | 🟢 High                                     |
 | **Total Memory Usage** | Sum of all processes                     | Slightly less than the sum                  |
 | **Risk of Starvation** | ❌ No                                      | ⚠️ Possible if not managed                  |
+
+---
+
+### **Choosing Between Time Slicing and MPS**
+| Feature              | Time-Slicing                           | MPS                                      |
+|---------------------|-------------------------------------|-----------------------------------------|
+| Process Execution  | Alternates workloads sequentially  | Runs multiple workloads in parallel    |
+| GPU Utilization    | Varies between 0% and 100%         | Maintains steady utilization           |
+| Memory Efficiency  | Medium                              | High                                   |
+| Best For           | Large, independent workloads       | Smaller, parallel workloads            |
+| Latency            | Higher due to context switching    | Lower due to concurrent execution      |
+
+🔹 **Choose Time-Slicing** if workloads are independent and don’t need parallel execution.
+🔹 **Choose MPS** if workloads require efficient GPU sharing with lower latency.
 
 ## **Visual Demonstrations**
 
