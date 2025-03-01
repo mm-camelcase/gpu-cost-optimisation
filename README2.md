@@ -1,5 +1,24 @@
 # GPU Cost Optimisation with CUDA MPS
 
+## **Table of Contents**
+1. [Overview](#overview)
+2. [Why This Project?](#why-this-project)
+3. [Project Structure](#project-structure)
+4. [Key Features](#key-features)
+5. [Setup Guide](#setup-guide)
+   - [Provision GPU Nodes](#1️⃣-provision-gpu-nodes)
+   - [Enable GPU Access](#2️⃣-enable-gpu-access)
+     - [Option 1: Enable CUDA Time Slicing](#option-1-enable-cuda-time-slicing)
+     - [Option 2: Enable CUDA MPS](#option-2-enable-cuda-mps-multi-process-service)
+   - [Configure GPU Usage in Pods](#3️⃣-configure-gpu-usage-in-pods)
+6. [CUDA MPS vs. Time Slicing](#cuda-mps-vs-time-slicing)
+   - [Choosing Between Time Slicing and MPS](#choosing-between-time-slicing-and-mps)
+7. [Visual Demonstrations](#visual-demonstrations)
+8. [Teardown Guide](#teardown-guide)
+9. [Future Enhancements](#future-enhancements)
+10. [Conclusion](#conclusion)
+11. [TODO](#todo)
+
 ## **Overview**
 
 **Kubernetes** has become the **de facto standard** for managing all types of workloads, providing scalability, automation, and efficient resource management.
