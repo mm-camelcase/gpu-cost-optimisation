@@ -135,11 +135,11 @@ To enable **GPU access** in Kubernetes, install the **NVIDIA K8s Device Plugin**
 
 ---
 
-## **Option 1: Enable CUDA Time Slicing**
+#### **Option 1: Enable CUDA Time Slicing**
 
 CUDA **Time Slicing** allows multiple workloads to share a single GPU by allocating usage time slots.
 
-### **Step 1: Deploy NVIDIA Device Plugin with Time Slicing**
+##### **Step 1: Deploy NVIDIA Device Plugin with Time Slicing**
 ```sh
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
 helm repo update
@@ -152,7 +152,7 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia.github.io/k8s-device-plugin \
   --values cuda/cuda-time-slicing-values.yaml
 ```
 
-### **Step 2: Configure Time Slicing**
+##### **Step 2: Configure Time Slicing**
 The configuration file **cuda/cuda-time-slicing-values.yaml** enables GPU sharing by defining how many workloads can run simultaneously on the same GPU.
 
 #### **Configuration Example**
@@ -185,11 +185,11 @@ config:
 
 ---
 
-## **Option 2: Enable CUDA MPS (Multi-Process Service)**
+#### **Option 2: Enable CUDA MPS (Multi-Process Service)**
 
 CUDA **MPS** allows multiple workloads to share a GPU **concurrently**, optimizing memory and compute utilization.
 
-### **Step 1: Connect to GPU Node**
+##### **Step 1: Connect to GPU Node**
 Before enabling MPS, access a GPU node using **AWS Systems Manager (SSM)**:
 ```sh
 aws ssm start-session --target $(aws ec2 describe-instances --region eu-west-1 \
@@ -197,7 +197,7 @@ aws ssm start-session --target $(aws ec2 describe-instances --region eu-west-1 \
   --query "Reservations[0].Instances[0].InstanceId" --output text) --region eu-west-1
 ```
 
-### **Step 2: Check GPU Compute Mode**
+##### **Step 2: Check GPU Compute Mode**
 Verify the current GPU compute mode:
 ```sh
 nvidia-smi -q | grep "Compute Mode"
@@ -214,7 +214,8 @@ By default, most GPUs operate in **Default Compute Mode**, which allows multiple
 ```sh
 sudo nvidia-smi -c EXCLUSIVE_PROCESS
 ```
-Enable the **MPS Daemon**:
+
+##### **Step 3: Enable the MPS Daemon**
 
 The **MPS Daemon** (Multi-Process Service Daemon) is a background process that enables multiple CUDA applications to share a GPU concurrently. It helps optimize GPU utilization by allowing multiple workloads to execute in parallel instead of time-slicing between them.
 
@@ -227,7 +228,7 @@ The **MPS Daemon** (Multi-Process Service Daemon) is a background process that e
 sudo nvidia-cuda-mps-control -d
 ```
 
-### **Step 3: Deploy NVIDIA Device Plugin with MPS**
+##### **Step 4: Deploy NVIDIA Device Plugin with MPS**
 ```sh
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
 helm repo update
@@ -240,7 +241,7 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia.github.io/k8s-device-plugin \
   --values cuda/cuda-mps-values.yaml
 ```
 
-### **Step 4: Configure MPS**
+### **Step 5: Configure MPS**
 The configuration file **cuda/cuda-mps-values.yaml** enables **multi-process service**, allowing concurrent execution of multiple workloads on a single GPU.
 
 #### **Configuration Example**
@@ -255,7 +256,7 @@ config:
             "resources": [
               {
                 "name": "nvidia.com/gpu",
-                "replicas": 2
+                "replicas": 4
               }
             ]
           }
