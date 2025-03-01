@@ -267,7 +267,7 @@ config:
 
 #### **Explanation**
 - **`"mps"`** → Enables CUDA Multi-Process Service (MPS).
-- **`"replicas": 2`** → Allows **two workloads** to run **concurrently** on the same GPU.
+- **`"replicas": 4`** → Allows **four workloads** to run **concurrently** on the same GPU.
 - **More efficient memory utilization** compared to time-slicing.
 
 ✅ **Use Case:** Ideal for AI inference and workloads that benefit from concurrent execution.
@@ -289,14 +289,50 @@ config:
 
 ### **3️⃣ Configure GPU Usage in Pods**
 
-Install Two Ollama AI Instances:
+#### **How Pods Request GPUs**
+
+In Kubernetes, pods request GPUs using **resource requests and limits** in their configuration. The **NVIDIA device plugin** registers GPUs as **extended resources**, which allows pods to specify GPU requirements explicitly.
+
+- **Resource Requests (`requests`)**: Defines the minimum GPU resources a pod requires. Kubernetes guarantees this allocation.
+- **Resource Limits (`limits`)**: Specifies the maximum GPU resources a pod can consume.
+- **Runtime Class (`runtimeClassName`)**: Ensures the container runtime supports GPU acceleration.
+
+When a pod requests a GPU, Kubernetes schedules it onto a node with an available GPU, based on the **NVIDIA device plugin's** registration.
+
+#### **Configuration Example: GPU Requests in Ollama**
+
+The configuration file **olama/ollama-1-values.yaml**:
+
+```yaml
+ollama:
+  runtimeClassName: "nvidia"  # Ensures GPU-enabled runtime
+  gpu:
+    enabled: true             # Enables GPU usage
+    type: 'nvidia'            # Specifies NVIDIA GPU type
+    number: 1                 # Requests one GPU per pod
+  resources:
+    limits:
+      nvidia.com/gpu: 1       # Maximum GPU resources assigned
+    requests:
+      nvidia.com/gpu: 1       # Minimum GPU resources required
+```
+
+#### **Deploying Ollama AI Instances**
+
+Install two **Ollama AI** instances that will run on the GPU nodes:
+
 ```sh
 helm upgrade -i ollama-1 ollama-helm/ollama --namespace ollama --create-namespace --values olama/ollama-1-values.yaml
 helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespace --values olama/ollama-2-values.yaml
 ```
 
-✅ **Allows multiple AI models to share one GPU dynamically.**
-  - todo explain how  ollama pods request vGPUs
+#### **Explanation**
+- **`runtimeClassName: "nvidia"`** → Ensures the container runs in an **NVIDIA GPU-enabled** runtime.
+- **`gpu.enabled: true`** → Enables GPU acceleration for the container.
+- **`resources.requests.nvidia.com/gpu: 1`** → Ensures at least **one GPU** is allocated for the pod.
+- **`resources.limits.nvidia.com/gpu: 1`** → Ensures the pod **cannot exceed** one GPU.
+
+✅ **This ensures each Ollama AI instance is scheduled on a node with an available GPU, utilizing Kubernetes’ GPU scheduling features.**
 
 ## **CUDA MPS vs. Time Slicing**
 
