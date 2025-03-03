@@ -345,13 +345,13 @@ Below is a visual representation of the Terraform workflow process:
 
 <table>
   <tr>
-    <th style="padding: 10px; border: none; text-align: left; vertical-align: top;"><b>Step 1: Select Action and Resource</b></th>
-    <th style="padding: 10px; border: none; text-align: left; vertical-align: top;"><b>Step 2: Review Terraform Plan</b></th>
+    <th style="padding: 10px; border: none; text-align: left; vertical-align: top;"><b>Time Slicing</b></th>
+    <th style="padding: 10px; border: none; text-align: left; vertical-align: top;"><b>MPS</b></th>
   </tr>
   <tr>
-    <td style="padding: 10px; border: none; vertical-align: top;"><img src="resources/images/gpu-time-slicing.gif" width="300"/></td>
+    <td style="padding: 10px; border: none; vertical-align: top;"><img src="resources/images/gpu-time-slicing.gif" width="500"/></td>
     <td style="padding: 10px; border: none; vertical-align: top;">
-      <img src="resources/images/gpu-mps.gif" width="300"/>
+      <img src="resources/images/gpu-mps.gif" width="500"/>
     </td>
   </tr>
 </table>  
