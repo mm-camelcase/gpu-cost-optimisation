@@ -372,6 +372,13 @@ The following **animated GIFs** illustrate the differences between **Time Slicin
 
 ✅ **This comparison highlights how Time Slicing prioritizes response speed while MPS optimizes efficiency.**
 
+### **Explanation of Feature Differences**
+
+- **Time Slicing** assigns the entire GPU to a single process at a time, leading to full GPU utilization per workload. However, it introduces **latency when switching** between workloads and does not efficiently share memory.
+- **MPS (Multi-Process Service)** allows multiple workloads to share GPU resources concurrently, leading to **better memory utilization** and **more stable GPU usage** but at the cost of **slower individual responses** since workloads must share compute power.
+
+Below is a detailed comparison of the two approaches based on real test results:
+
 | Feature               | **Time Slicing 🚀** | **MPS ⚡** |
 |---------------------- |-------------------|-------------------|
 | **Process Execution**  | **Alternates workloads (one at a time)** | **Runs multiple workloads in parallel** |
