@@ -338,6 +338,9 @@ helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespac
 
 ✅ **This ensures each Ollama AI instance is scheduled on a node with an available GPU, utilizing Kubernetes’ GPU scheduling features.**
 
+![GPU Node](resources/images/gpu_node.png)
+**Figure 2:** Two Ollama AI models running on the same GPU, with necessary NVEDIA device plugin and system pods
+
 
 ## **CUDA Time Slicing vs. MPS**
 
