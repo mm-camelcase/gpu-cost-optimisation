@@ -349,9 +349,9 @@ Below is a visual representation of the Terraform workflow process:
     <th style="padding: 10px; border: none; text-align: left; vertical-align: top;"><b>MPS</b></th>
   </tr>
   <tr>
-    <td style="padding: 10px; border: none; vertical-align: top;"><img src="resources/images/gpu-time-slicing.gif" width="500"/></td>
+    <td style="padding: 10px; border: none; vertical-align: top;"><img src="resources/images/gpu-time-slicing.gif" /></td>
     <td style="padding: 10px; border: none; vertical-align: top;">
-      <img src="resources/images/gpu-mps.gif" width="500"/>
+      <img src="resources/images/gpu-mps.gif" />
     </td>
   </tr>
 </table>  
