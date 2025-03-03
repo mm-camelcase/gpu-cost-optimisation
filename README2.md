@@ -370,7 +370,7 @@ The following **animated GIFs** illustrate the differences between **Time Slicin
   </tr>
 </table>  
 
-✅ **This comparison highlights how Time Slicing prioritizes response speed while MPS optimizes efficiency.**
+
 
 ### **Explanation of Feature Differences**
 
@@ -394,6 +394,8 @@ Below is a detailed comparison of the two approaches based on real test results:
 ✅ **Time Slicing is ideal for workloads that require low-latency responses**, but it can be inefficient with memory and GPU allocation.  
 ✅ **MPS provides better overall efficiency**, but individual workloads receive less GPU power, leading to slower responses.     |
 
+
+[todo] isdel to run 2 ollama models..
 ---
 
 ### **Choosing Between Time Slicing and MPS**
