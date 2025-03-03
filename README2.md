@@ -303,7 +303,7 @@ In Kubernetes, pods request GPUs using **resource requests and limits** in their
 
 When a pod requests a GPU, Kubernetes schedules it onto a node with an available GPU, based on the **NVIDIA device plugin's** registration.
 
-#### **Configuration Example: GPU Requests in Ollama**
+**Configuration Example: GPU Requests in Ollama**
 
 The configuration file **olama/ollama-1-values.yaml**:
 
