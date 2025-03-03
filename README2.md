@@ -341,7 +341,7 @@ helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespac
 
 ## **CUDA Time Slicing vs. MPS**
 
-Below is a visual representation of the Terraform workflow process:
+The following **animated GIFs** illustrate the differences between **Time Slicing** and **MPS** when running two Ollama models alongside `nvidia-smi`.
 
 <table>
   <tr>
@@ -359,26 +359,33 @@ Below is a visual representation of the Terraform workflow process:
       <b>GPU Utilization:</b> Above 90% when either AI is active.<br>
       <b>Memory Usage:</b> Chatbot 1 uses over 8GB, Chatbot 2 uses over 5GB.<br>
       <b>Total Memory Usage:</b> 14GB out of 16GB utilized.
+      <b>Chatbot Response Speed:</b> 🚀 **Faster** due to full GPU access per request.<br>
     </td>
     <td style="padding: 10px; border: none; vertical-align: top;">
       <b>GPU Utilization:</b> Alternates between 15% and 40%.<br>
       <b>Memory Usage:</b> Each AI gets roughly 3.2GB.<br>
       <b>Total Memory Usage:</b> Evenly distributed across workloads.
+      <b>Chatbot Response Speed:</b> 🐢 **Slower** due to shared GPU processing.<br>
     </td>
   </tr>
 </table>  
 
-| Feature               | Time-Slicing                                 | MPS                                          |
-|---------------------- |------------------------------------------- |--------------------------------------------- |
-| **Process Switching** | Alternates (one at a time)                 | Runs concurrently                            |
-| **GPU Utilization**   | Spikes (100% → 0%)                         | Steady (e.g., 50%)                          |
-| **Total Utilization** | ~100% but fluctuates                       | ~100% and stable                            |
-| **Latency**          | Higher (switching overhead)                 | Lower                                       |
-| **Best For**         | Large independent workloads                 | Smaller, parallel workloads                 |
-| **Memory Sharing**   | ❌ No                                        | ✅ Yes (some overlap)                        |
-| **Memory Efficiency**| 🟡 Medium                                   | 🟢 High                                     |
-| **Total Memory Usage** | Sum of all processes                     | Slightly less than the sum                  |
-| **Risk of Starvation** | ❌ No                                      | ⚠️ Possible if not managed                  |
+✅ **This comparison highlights how Time Slicing prioritizes response speed while MPS optimizes efficiency.**
+
+| Feature               | **Time Slicing 🚀** | **MPS ⚡** |
+|---------------------- |-------------------|-------------------|
+| **Process Execution**  | **Alternates workloads (one at a time)** | **Runs multiple workloads in parallel** |
+| **GPU Utilization**   | **Spikes to 90%+** when chatbot is active | **Fluctuates between 15% and 40%** |
+| **Total Utilization** | **Near 100%, but fluctuates** | **Stable at lower utilization (~40%)** |
+| **Latency (Response Time)**  | **Faster** 🚀 (Full GPU per chatbot) | **Slower** 🐢 (Shared GPU resources) |
+| **Best For**         | **Low-latency, burst workloads** (single-task inference) | **Running multiple AI tasks together** |
+| **Memory Sharing**   | ❌ **No** (each process gets its own memory) | ✅ **Yes** (evenly distributed) |
+| **Memory Efficiency** | 🟡 **Medium** (unused memory stays allocated) | 🟢 **High** (memory dynamically shared) |
+| **Total Memory Usage** | **Chatbot 1: 8GB+, Chatbot 2: 5GB+** (14GB used) | **Each AI gets ~3.2GB, well-distributed** |
+| **Risk of Starvation** | ❌ **No** (full access when running) | ⚠️ **Possible if one AI dominates resources** |
+
+✅ **Time Slicing is ideal for workloads that require low-latency responses**, but it can be inefficient with memory and GPU allocation.  
+✅ **MPS provides better overall efficiency**, but individual workloads receive less GPU power, leading to slower responses.     |
 
 ---
 
