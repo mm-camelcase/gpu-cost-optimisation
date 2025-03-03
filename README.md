@@ -406,7 +406,7 @@ Below is a detailed comparison of the two approaches based on real test results:
 
 ## **Teardown Guide**
 
-see ....
+:link: see [cleanup.md](cleanup.md)
 
 To delete all resources:
 ```sh
