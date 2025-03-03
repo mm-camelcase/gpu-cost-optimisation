@@ -6,7 +6,7 @@ Zellij allows you to open multiple windows and tabs within a terminal. A zellij 
 
 The layout used in this demo : [ai_gpu_dashboard.kdl](ai_gpu_dashboard.kdl)
 
-![Zellij Layout](/assets/images/zellij.png)
+![Zellij Layout](../images/zellij.png)
 
 To use this layout save `ai_gpu_dashboard.kdl` to `~/.config/zellij/layouts/` and from `gpu-cost-optimisation` project home run  
 
