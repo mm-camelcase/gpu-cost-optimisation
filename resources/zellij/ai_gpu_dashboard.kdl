@@ -8,7 +8,7 @@ layout {
 
     tab name="AI Chat + GPU Monitor" focus=true {
         pane split_direction="vertical" {
-            pane size="50%" cwd="~/workspace/ai-projects" name="AI CHAT" command="python3" {
+            pane size="50%" name="AI CHAT" command="python3" {
                 args "ollama_chat.py"
             }
             pane size="50%" name="GPU MONITOR" command="bash" {
