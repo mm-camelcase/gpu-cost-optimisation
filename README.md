@@ -10,11 +10,11 @@
      - [Option 1: Enable CUDA Time Slicing](#option-1-enable-cuda-time-slicing)
      - [Option 2: Enable CUDA MPS](#option-2-enable-cuda-mps-multi-process-service)
    - [3️⃣ Configure GPU Usage in Pods](#3️⃣-configure-gpu-usage-in-pods)
-5. [CUDA MPS vs. Time Slicing](#cuda-mps-vs-time-slicing)
-   - [Choosing Between Time Slicing and MPS](#choosing-between-time-slicing-and-mps)
-6. [Visual Demonstrations](#visual-demonstrations)
-7. [Teardown Guide](#teardown-guide)
-8. [Future Enhancements](#future-enhancements)
+5. [CUDA Time Slicing vs. MPS](#cuda-time-slicing-vs.-mps)
+   - [Explanation of Feature Differences](#explanation-of-feature-differences)
+   - [Conclusion](#conclusion)
+6. [Teardown Guide](#teardown-guide)
+7. [Future Enhancements](#future-enhancements)
 
 
 ## **Overview**
