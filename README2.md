@@ -354,6 +354,18 @@ Below is a visual representation of the Terraform workflow process:
       <img src="resources/images/gpu-mps.gif" />
     </td>
   </tr>
+  <tr>
+    <td style="padding: 10px; border: none; vertical-align: top;">
+      <b>GPU Utilization:</b> Above 90% when either AI is active.<br>
+      <b>Memory Usage:</b> Chatbot 1 uses over 8GB, Chatbot 2 uses over 5GB.<br>
+      <b>Total Memory Usage:</b> 14GB out of 16GB utilized.
+    </td>
+    <td style="padding: 10px; border: none; vertical-align: top;">
+      <b>GPU Utilization:</b> Alternates between 15% and 40%.<br>
+      <b>Memory Usage:</b> Each AI gets roughly 3.2GB.<br>
+      <b>Total Memory Usage:</b> Evenly distributed across workloads.
+    </td>
+  </tr>
 </table>  
 
 | Feature               | Time-Slicing                                 | MPS                                          |
