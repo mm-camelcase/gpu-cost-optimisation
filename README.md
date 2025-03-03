@@ -16,8 +16,7 @@
 7. [Visual Demonstrations](#visual-demonstrations)
 8. [Teardown Guide](#teardown-guide)
 9. [Future Enhancements](#future-enhancements)
-10. [Conclusion](#conclusion)
-11. [TODO](#todo)
+
 
 ## **Overview**
 
