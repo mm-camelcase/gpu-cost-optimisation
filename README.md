@@ -408,11 +408,6 @@ Below is a detailed comparison of the two approaches based on real test results:
 
 :link: see [cleanup.md](cleanup.md)
 
-To delete all resources:
-```sh
-aws eks delete-nodegroup --cluster-name ollama-cluster --nodegroup-name gpu-spot-nodes --region ${AWS_REGION}
-aws eks delete-cluster --name ollama-cluster --region ${AWS_REGION}
-```
 
 ✅ **All resources should be removed successfully!**
 
