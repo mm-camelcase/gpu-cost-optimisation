@@ -3,19 +3,18 @@
 ## **Table of Contents**
 1. [Overview](#overview)
 2. [Why This Project?](#why-this-project)
-3. [Project Structure](#project-structure)
-4. [Key Features](#key-features)
-5. [Setup Guide](#setup-guide)
-   - [Provision GPU Nodes](#1️⃣-provision-gpu-nodes)
+3. [Key Features](#key-features)
+4. [Setup Guide](#setup-guide)
+   - [1️⃣ GPU Nodes](#1️⃣-provision-gpu-nodes)
    - [Enable GPU Access](#2️⃣-enable-gpu-access)
      - [Option 1: Enable CUDA Time Slicing](#option-1-enable-cuda-time-slicing)
      - [Option 2: Enable CUDA MPS](#option-2-enable-cuda-mps-multi-process-service)
    - [Configure GPU Usage in Pods](#3️⃣-configure-gpu-usage-in-pods)
-6. [CUDA MPS vs. Time Slicing](#cuda-mps-vs-time-slicing)
+5. [CUDA MPS vs. Time Slicing](#cuda-mps-vs-time-slicing)
    - [Choosing Between Time Slicing and MPS](#choosing-between-time-slicing-and-mps)
-7. [Visual Demonstrations](#visual-demonstrations)
-8. [Teardown Guide](#teardown-guide)
-9. [Future Enhancements](#future-enhancements)
+6. [Visual Demonstrations](#visual-demonstrations)
+7. [Teardown Guide](#teardown-guide)
+8. [Future Enhancements](#future-enhancements)
 
 
 ## **Overview**
@@ -40,14 +39,6 @@ High-performance GPUs like **NVIDIA A100** or **H100** can be **prohibitively ex
 - ✅ Compare **CUDA MPS** and **CUDA Time Slicing** for shared GPU usage.
 - ✅ **Use Spot Instances** to save up to **90% on GPU costs**.
 
-## **Project Structure**
-```
-/gpu-cost-optimisation
-  ├── /cuda            # CUDA configs for dynamic GPU sharing
-  ├── /olama           # Ollama AI model values configuration
-  ├── /results         # Benchmark results and performance comparisons
-  ├── /README.md       # Documentation and setup guide
-```
 
 ## **Key Features**
 
