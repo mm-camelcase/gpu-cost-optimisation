@@ -1,4 +1,4 @@
-# GPU Cost Optimisation with CUDA MPS
+# GPU Cost Optimisation with Kubernetes
 
 ## **Table of Contents**
 1. [Overview](#overview)
