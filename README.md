@@ -409,8 +409,6 @@ Below is a detailed comparison of the two approaches based on real test results:
 :link: see [cleanup.md](cleanup.md)
 
 
-✅ **All resources should be removed successfully!**
-
 ## **Future Enhancements**
 
 - ✅ Use **SPOT GPU Nodes**.
