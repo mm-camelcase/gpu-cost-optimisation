@@ -1,10 +1,54 @@
-# 🚀 Cleanup Leftover AWS Resources After Deleting an EKS Cluster
+## Teardown Guide
+
+To delete all resources follow these steps:
+
+1️⃣ Delete the Knative Service
+
+```sh
+kubectl delete -f ollama-knative.yaml
+```
+
+2️⃣ Delete the GPU Node Group
+
+```sh
+aws eks delete-nodegroup \
+  --cluster-name ollama-cluster \
+  --nodegroup-name gpu-spot-nodes \
+  --region ${AWS_REGION}
+```
+
+```sh
+aws eks delete-nodegroup \
+  --cluster-name ollama-cluster \
+  --nodegroup-name cpu-system-nodes \
+  --region ${AWS_REGION}
+```
+
+3️⃣ Delete the EKS Cluster
+
+```sh
+aws eks delete-cluster \
+  --name ollama-cluster \
+  --region ${AWS_REGION}
+```
+
+4️⃣ Verify Deletion
+
+Ensure all resources have been deleted:
+
+```sh
+aws eks list-clusters --region ${AWS_REGION}
+aws eks list-nodegroups --cluster-name ollama-cluster --region ${AWS_REGION}
+```
+
+
+### 🚀 Cleanup Leftover AWS Resources After Deleting an EKS Cluster
 
 When you delete an AWS EKS cluster, some resources may remain, such as **Classic Load Balancers (CLB), Security Groups, Elastic IPs, and Route53 records**. This guide helps you remove those leftover resources to avoid unnecessary charges.
 
 ---
 
-## **🔥 Step 1: Delete the Leftover Load Balancer**
+#### **🔥 Step 1: Delete the Leftover Load Balancer**
 The **Classic Load Balancer (CLB)** was left behind because Kubernetes services (like **Knative Kourier**) created it, but it wasn’t deleted with the cluster.
 
 Run the following command to delete it:
@@ -20,7 +64,7 @@ If nothing is returned, it’s successfully deleted.
 
 ---
 
-## **🔥 Step 2: Delete the Leftover Security Group**
+#### **🔥 Step 2: Delete the Leftover Security Group**
 AWS won’t allow you to delete a security group **if it’s still in use**. First, find the security group ID:
 ```sh
 aws ec2 describe-security-groups --filters Name=group-name,Values="Security group for Kubernetes ELB a714d2d3e91ac41a0a598c84fb65e4e9*" --query "SecurityGroups[*].GroupId" --region ${AWS_REGION}
@@ -43,7 +87,7 @@ If nothing is returned, it’s successfully deleted.
 
 ---
 
-## **🔥 Step 3: Check for Leftover Elastic IPs (Optional)**
+#### **🔥 Step 3: Check for Leftover Elastic IPs (Optional)**
 If an **Elastic IP (EIP)** was assigned to this Load Balancer, you might be getting billed for it. Run:
 ```sh
 aws ec2 describe-addresses --region ${AWS_REGION}
@@ -55,7 +99,7 @@ aws ec2 release-address --allocation-id eipalloc-1234567890abcdef0 --region ${AW
 
 ---
 
-## **🔥 Step 4: Check for Leftover Route53 Records (Optional)**
+#### **🔥 Step 4: Check for Leftover Route53 Records (Optional)**
 If you used **a custom domain** with Knative, check if **Route53 still has records pointing to the old Load Balancer**:
 ```sh
 aws route53 list-hosted-zones --query "HostedZones[*].Name"
@@ -64,7 +108,7 @@ Find the hosted zone ID and delete the records manually.
 
 ---
 
-## **✅ Final Cleanup Confirmation**
+#### **✅ Final Cleanup Confirmation**
 Run these commands to confirm everything is removed:
 ```sh
 aws elb describe-load-balancers --region ${AWS_REGION}  # Should return nothing
