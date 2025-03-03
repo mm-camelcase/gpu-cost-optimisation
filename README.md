@@ -60,6 +60,7 @@ High-performance GPUs like **NVIDIA A100** or **H100** can be **prohibitively ex
 
 ![Infrastructure](gpu-time-slicing.gif)
 **Figure 1:** Two Ollama AI models ~~plotting~~ conversing with each other on the same GPU.
+- see [zellij config](zellij/layout.md) for the dashboard used in this console.
 
 
 
