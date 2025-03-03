@@ -339,9 +339,22 @@ helm upgrade -i ollama-2 ollama-helm/ollama --namespace ollama --create-namespac
 ✅ **This ensures each Ollama AI instance is scheduled on a node with an available GPU, utilizing Kubernetes’ GPU scheduling features.**
 
 
+## **CUDA Time Slicing vs. MPS**
 
+Below is a visual representation of the Terraform workflow process:
 
-## **CUDA MPS vs. Time Slicing**
+<table>
+  <tr>
+    <th style="padding: 10px; border: none; text-align: left; vertical-align: top;"><b>Step 1: Select Action and Resource</b></th>
+    <th style="padding: 10px; border: none; text-align: left; vertical-align: top;"><b>Step 2: Review Terraform Plan</b></th>
+  </tr>
+  <tr>
+    <td style="padding: 10px; border: none; vertical-align: top;"><img src="cuda/cuda-time-slicing-values.yaml" width="300"/></td>
+    <td style="padding: 10px; border: none; vertical-align: top;">
+      <img src="cuda/cuda-mps-values.yaml" width="300"/>
+    </td>
+  </tr>
+</table>  
 
 | Feature               | Time-Slicing                                 | MPS                                          |
 |---------------------- |------------------------------------------- |--------------------------------------------- |
