@@ -174,7 +174,6 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia.github.io/k8s-device-plugin \
 ##### **Step 2: Configure Time Slicing**
 The configuration file **cuda/cuda-time-slicing-values.yaml** enables GPU sharing by defining how many workloads can run simultaneously on the same GPU.
 
-#### **Configuration Example**
 ```yaml
 config:
   map:
@@ -195,7 +194,7 @@ config:
   default: "default"
 ```
 
-#### **Explanation**
+**Explanation**
 - **`"name": "nvidia.com/gpu"`** → Defines the GPU resource type recognized by Kubernetes.
 - **`"replicas": 4`** → Allows up to **4 workloads** to share the same physical GPU by assigning time slices.
 - **`"timeSlicing"`** → Enables GPU time-sharing rather than exclusive access per workload.
@@ -260,10 +259,9 @@ helm upgrade -i nvidia-device-plugin nvdp/nvidia.github.io/k8s-device-plugin \
   --values cuda/cuda-mps-values.yaml
 ```
 
-### **Step 5: Configure MPS**
+##### **Step 5: Configure MPS**
 The configuration file **cuda/cuda-mps-values.yaml** enables **multi-process service**, allowing concurrent execution of multiple workloads on a single GPU.
 
-#### **Configuration Example**
 ```yaml
 config:
   map:
@@ -284,13 +282,12 @@ config:
   default: "default"
 ```
 
-#### **Explanation**
+**Explanation**
 - **`"mps"`** → Enables CUDA Multi-Process Service (MPS).
 - **`"replicas": 4`** → Allows **four workloads** to run **concurrently** on the same GPU.
 - **More efficient memory utilization** compared to time-slicing.
 
 ✅ **Use Case:** Ideal for AI inference and workloads that benefit from concurrent execution.
-
 
 
 
